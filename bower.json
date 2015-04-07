@@ -1,0 +1,23 @@
+{
+  "name": "visibility",
+  "version": "0.0.0",
+  "authors": [
+    "Jason Dunkelberger (dirkraft) <dirkraft@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "ui/lib/bower_components/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "moment": "~2.10.0",
+    "bootstrap": "~3.3.4",
+    "aws-sdk": "~2.1.21",
+    "amcharts-stock": "*",
+    "react": "~0.13.1"
+  }
+}
