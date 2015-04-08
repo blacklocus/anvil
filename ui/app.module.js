@@ -1,0 +1,1 @@
+VisApp = angular.module('VisApp', []);
