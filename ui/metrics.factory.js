@@ -9,10 +9,10 @@
         Util = Vis.Util,
         cw = new AWS.CloudWatch;
 
-    Metrics.dataOf = function (metric, window, period) {
+    Metrics.dataOf = function (metricDescriptor, window, period) {
 
       var missing = ['namespace', 'name', 'dimensions', 'aggregation'].filter(function (el) {
-        return !metric.hasOwnProperty(el);
+        return !metricDescriptor.hasOwnProperty(el);
       });
       if (missing.length) {
         throw 'Given metric missing properties: ' + missing;
@@ -25,20 +25,20 @@
         period = Util.toDuration(period);
       }
 
-      var dimensions = Object.keys(metric.dimensions).map(function (dimensionName) {
+      var dimensions = Object.keys(metricDescriptor.dimensions).map(function (dimensionName) {
         return {
           Name: dimensionName,
-          Value: metric.dimensions[dimensionName]
+          Value: metricDescriptor.dimensions[dimensionName]
         }
       });
 
       var params = {
         StartTime: moment().subtract(window).toDate(),
         EndTime: new Date,
-        Namespace: metric.namespace,
-        MetricName: metric.name,
+        Namespace: metricDescriptor.namespace,
+        MetricName: metricDescriptor.name,
         Period: period.asSeconds(),
-        Statistics: [metric.aggregation],
+        Statistics: [metricDescriptor.aggregation],
         Dimensions: dimensions
       };
 

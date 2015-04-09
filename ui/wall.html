@@ -11,30 +11,30 @@
     <div class="form form-inline">
       <div class="row">
     <span class="col-xs-3 text-right">
-      window of <strong>{{ board.windowOpts[board.selectedWindowIdx].humanize() }}</strong>
+      window of <strong>{{ boardCtrl.windowOpts[boardCtrl.selectedWindowIdx].humanize() }}</strong>
     </span>
     <span class="col-xs-9">
-      <input type="range" min="0" max="{{ board.windowOpts.length - 1 }}"
-             ng-model="vis.selectedWindowIdx" ng-change="board.windowUpdated()"/>
+      <input type="range" min="0" max="{{ boardCtrl.windowOpts.length - 1 }}"
+             ng-model="boardCtrl.selectedWindowIdx" ng-change="boardCtrl.windowUpdated()"/>
     </span>
       </div>
       <div class="row">
     <span class="col-xs-3 text-right" style="border-bottom: 1px lightgray solid;">
-      / periods of <strong>{{ board.periodOpts[board.selectedPeriodIdx].humanize() }}</strong>
+      / periods of <strong>{{ boardCtrl.periodOpts[boardCtrl.selectedPeriodIdx].humanize() }}</strong>
     </span>
     <span class="col-xs-9">
-      <input type="range" min="0" max="{{ board.periodOpts.length - 1 }}"
-             ng-model="vis.selectedPeriodIdx" ng-change="board.periodUpdated()"/>
+      <input type="range" min="0" max="{{ boardCtrl.periodOpts.length - 1 }}"
+             ng-model="boardCtrl.selectedPeriodIdx" ng-change="boardCtrl.periodUpdated()"/>
     </span>
       </div>
       <div class="row">
     <span class="col-xs-3 text-right">
-      = up to <strong>{{ board.windowOpts[board.selectedWindowIdx] / board.periodOpts[board.selectedPeriodIdx] }}</strong> data
-      points
+      = up to <strong>{{ boardCtrl.windowOpts[boardCtrl.selectedWindowIdx] /
+      boardCtrl.periodOpts[boardCtrl.selectedPeriodIdx] }}</strong> data points
     </span>
         <aside class="col-xs-9">
           ⇐ The sliders maintain a reasonable number of data points with respect to one another, in the range of
-          <code>[ {{ board.minDataPoints }}, {{ board.maxDataPoints }} ]</code>
+          <code>[ {{ boardCtrl.minDataPoints }}, {{ boardCtrl.maxDataPoints }} ]</code>
         </aside>
       </div>
     </div>
