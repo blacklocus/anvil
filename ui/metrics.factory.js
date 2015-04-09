@@ -6,31 +6,25 @@
   function Metrics($q) {
 
     var Metrics = this,
+        Util = Vis.Util,
         cw = new AWS.CloudWatch;
 
-    var metricType = 'CloudWatch:metric';
-    var metricProps = ['namespace', 'name', 'dimensions', 'aggregation', 'period', 'window'];
+    Metrics.dataOf = function (metric, window, period) {
 
-
-    Metrics.dataOf = function (metric) {
-
-      if (metricType != metric.type) {
-        throw 'Given metric.type was not ' + metricType;
-      }
-
-      var missing = metricProps.filter(function (el) {
+      var missing = ['namespace', 'name', 'dimensions', 'aggregation'].filter(function (el) {
         return !metric.hasOwnProperty(el);
       });
       if (missing.length) {
         throw 'Given metric missing properties: ' + missing;
       }
 
-      var window = metric.window.split(' ', 2),
-          windowLength = Number(window[0]),
-          windowUnit = window[1];
-      var period = metric.period.split(' ', 2),
-          periodLength = Number(period[0]),
-          periodUnit = period[1];
+      if (typeof window === 'string') {
+        window = Util.toDuration(window);
+      }
+      if (typeof period === 'string') {
+        period = Util.toDuration(period);
+      }
+
       var dimensions = Object.keys(metric.dimensions).map(function (dimensionName) {
         return {
           Name: dimensionName,
@@ -39,11 +33,11 @@
       });
 
       var params = {
-        StartTime: moment().subtract(windowLength, windowUnit).toDate(),
+        StartTime: moment().subtract(window).toDate(),
         EndTime: new Date,
         Namespace: metric.namespace,
         MetricName: metric.name,
-        Period: moment.duration(periodLength, periodUnit).asSeconds(),
+        Period: period.asSeconds(),
         Statistics: [metric.aggregation],
         Dimensions: dimensions
       };

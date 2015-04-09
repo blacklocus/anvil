@@ -1,0 +1,9 @@
+* {
+    /* keep it sharp */
+    border-radius: 0 !important;
+}
+
+code {
+    /* don't chop <code> sequences into pieces */
+    white-space: nowrap;
+}

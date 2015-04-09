@@ -12,12 +12,22 @@
     vm.minDataPoints = 10;
     vm.maxDataPoints = 1000;
 
-    vm.selectedWindowIdx = 0;
     vm.windowOpts = Util.toDurations(['2 weeks', '10 days', '1 week', '6 days', '5 days', '4 days', '3 days',
       '2 days', '1 day', '18 hours', '12 hours', '6 hours', '3 hours', '2 hours', '1 hour']);
+    vm.selectedWindowIdx = vm.windowOpts.length - 1;
 
     vm.periodOpts = Util.toDurations(['1 day', '6 hours', '1 hour', '15 minutes', '5 minutes', '1 minute']);
-    vm.selectedPeriodIdx = 0;
+    vm.selectedPeriodIdx = vm.periodOpts.length - 1;
+
+    // Initialize sliders to first encompassing window and period.
+    var boardWindow = Util.toDuration(board.window);
+    while (boardWindow > vm.windowOpts[vm.selectedWindowIdx]) {
+      --vm.selectedWindowIdx;
+    }
+    var boardPeriod = Util.toDuration(board.period);
+    while (boardPeriod > vm.periodOpts[vm.selectedPeriodIdx]) {
+      --vm.selectedPeriodIdx;
+    }
 
 
     vm.windowUpdated = function () {
@@ -49,20 +59,9 @@
     };
 
 
-    var largestWindow = Util.maxDuration(Util.toDurations(board.things.map(function (thing) {
-      return thing.window;
-    })));
-    // First window opt that encompasses the required duration.
-    vm.selectedWindowIdx = vm.windowOpts.length - 1;
-    for (var i = vm.windowOpts.length - 1; vm.windowOpts[vm.selectedWindowIdx] <= largestWindow && i >= 0; i--) {
-      vm.selectedWindowIdx = i;
-    }
-    vm.windowUpdated();
-
-
     $q.all(board.things
         .map(function (thing) {
-          return Metrics.dataOf(thing);
+          return Metrics.dataOf(thing, board.window, board.period);
         }))
         .then(function (metrics) {
           var flotData = Charting.toFlotData(board, metrics);

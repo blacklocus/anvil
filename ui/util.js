@@ -16,10 +16,12 @@ Vis.Util = new function () {
     return max;
   };
 
+  Util.toDuration = function (str) {
+    var parts = str.split(' ', 2);
+    return moment.duration(Number(parts[0]), parts[1]);
+  };
+
   Util.toDurations = function (strs) {
-    return strs.map(function (str) {
-      var parts = str.split(' ', 2);
-      return moment.duration(Number(parts[0]), parts[1]);
-    })
+    return strs.map(Util.toDuration);
   };
 };
