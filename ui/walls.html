@@ -1,0 +1,55 @@
+<div ng-controller="WallsCtrl as walls">
+
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th>name</th>
+      <th>boards</th>
+      <th>created</th>
+      <th>modified</th>
+      <th>action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td colspan="5">
+        <button type="button" class="btn btn-success"
+                ng-disabled="walls.editingNewWall"
+                ng-click="walls.startNewWall()">add new wall
+        </button>
+      </td>
+    </tr>
+    <tr ng-show="walls.listLoading">
+      <td colspan="5"><i class="fa fa-spinner fa-spin"></i> loading</td>
+    </tr>
+    <tr class="bg-success" ng-show="walls.editingNewWall" ng-model="walls.newWall">
+      <td>
+        <input type="text" class="form-control" ng-model="walls.newWall.name"/>
+      </td>
+      <td>{{ walls.newWall.boards.length }}</td>
+      <td>{{ walls.newWall.created }}</td>
+      <td>{{ walls.newWall.modified }}</td>
+      <td>
+        <button type="button" class="btn btn-success"
+                ng-disabled="walls.savingNewWall"
+                ng-click="walls.saveNewWall()">Create New Wall
+        </button>
+      </td>
+    </tr>
+    <tr ng-repeat="wall in walls.list">
+      <td>{{ wall.name }}</td>
+      <td>{{ wall.boards.length }}</td>
+      <td>{{ wall.created }}</td>
+      <td>{{ wall.modified }}</td>
+      <td>
+        <button type="button" class="btn btn-info" ui-sref="wall({name: wall.name})">Wall Up
+        </button>
+        <button type="button" class="btn btn-danger btn-sm pull-right"
+                ng-click="walls.destroyWall(wall)">Demolish
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>

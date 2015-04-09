@@ -1,12 +1,12 @@
 (function () {
 
-  VisApp.controller('VisCtrl', VisCtrl);
+  VisApp.controller('WallCtrl', WallCtrl);
 
-  VisCtrl.$inject = ['$q', 'Metrics', 'Charting'];
+  WallCtrl.$inject = ['$q', '$state', 'Metrics', 'Charting'];
 
-  function VisCtrl($q, Metrics, Charting) {
+  function WallCtrl($q, $state, Metrics, Charting) {
     var vm = this,
-        board = Vis.CFG.board,
+        wallName = $state.params.name,
         Util = Vis.Util;
 
     vm.minDataPoints = 10;
@@ -14,20 +14,7 @@
 
     vm.windowOpts = Util.toDurations(['2 weeks', '10 days', '1 week', '6 days', '5 days', '4 days', '3 days',
       '2 days', '1 day', '18 hours', '12 hours', '6 hours', '3 hours', '2 hours', '1 hour']);
-    vm.selectedWindowIdx = vm.windowOpts.length - 1;
-
     vm.periodOpts = Util.toDurations(['1 day', '6 hours', '1 hour', '15 minutes', '5 minutes', '1 minute']);
-    vm.selectedPeriodIdx = vm.periodOpts.length - 1;
-
-    // Initialize sliders to first encompassing window and period.
-    var boardWindow = Util.toDuration(board.window);
-    while (boardWindow > vm.windowOpts[vm.selectedWindowIdx]) {
-      --vm.selectedWindowIdx;
-    }
-    var boardPeriod = Util.toDuration(board.period);
-    while (boardPeriod > vm.periodOpts[vm.selectedPeriodIdx]) {
-      --vm.selectedPeriodIdx;
-    }
 
 
     vm.windowUpdated = function () {
@@ -58,35 +45,54 @@
       }
     };
 
+    // Get the wall definition and build the boards.
+    Util.thenPromiseSuccessOrAlert(Walls.get(wallName), initialize);
 
-    $q.all(board.things
-        .map(function (thing) {
-          return Metrics.dataOf(thing, board.window, board.period);
-        }))
-        .then(function (metrics) {
-          var flotData = Charting.toFlotData(board, metrics);
 
-          var flot = $('#chart-ctn')
-              .plot(flotData, {
-                legend: {
-                  show: true
-                },
-                xaxis: {
-                  tickFormatter: function (val) {
-                    return moment(val).format('HH:mm');
+    function initialize(wall) {
+
+      // Initialize sliders to first encompassing window and period.
+      vm.selectedWindowIdx = vm.windowOpts.length - 1;
+      var boardWindow = Util.toDuration(wall.window);
+      while (boardWindow > vm.windowOpts[vm.selectedWindowIdx]) {
+        --vm.selectedWindowIdx;
+      }
+
+      vm.selectedPeriodIdx = vm.periodOpts.length - 1;
+      var boardPeriod = Util.toDuration(wall.period);
+      while (boardPeriod > vm.periodOpts[vm.selectedPeriodIdx]) {
+        --vm.selectedPeriodIdx;
+      }
+
+      $q.all(wall.boards
+          .map(function (board) {
+            return Metrics.dataOf(board, wall.window, wall.period);
+          }))
+          .then(function (metrics) {
+            var flotData = Charting.toFlotData(wall.boards, metrics);
+
+            var flot = $('#chart-ctn')
+                .plot(flotData, {
+                  legend: {
+                    show: true
+                  },
+                  xaxis: {
+                    tickFormatter: function (val) {
+                      return moment(val).format('HH:mm');
+                    }
                   }
-                }
-              })
-              .data('plot');
+                })
+                .data('plot');
 
-          // Stay with window size.
-          $(window).resize(function () {
-            flot.resize();
-            flot.setupGrid();
-            flot.draw();
-          });
+            // Stay with window size.
+            $(window).resize(function () {
+              flot.resize();
+              flot.setupGrid();
+              flot.draw();
+            });
 
-        }, Util.defaultErrorHandler);
+          }, Util.defaultErrorHandler);
 
+    }
   }
 }());

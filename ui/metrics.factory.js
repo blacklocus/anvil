@@ -9,10 +9,10 @@
         Util = Vis.Util,
         cw = new AWS.CloudWatch;
 
-    Metrics.dataOf = function (metric, window, period) {
+    Metrics.dataOf = function (board, window, period) {
 
       var missing = ['namespace', 'name', 'dimensions', 'aggregation'].filter(function (el) {
-        return !metric.hasOwnProperty(el);
+        return !board.hasOwnProperty(el);
       });
       if (missing.length) {
         throw 'Given metric missing properties: ' + missing;
@@ -25,35 +25,31 @@
         period = Util.toDuration(period);
       }
 
-      var dimensions = Object.keys(metric.dimensions).map(function (dimensionName) {
+      var dimensions = Object.keys(board.dimensions).map(function (dimensionName) {
         return {
           Name: dimensionName,
-          Value: metric.dimensions[dimensionName]
+          Value: board.dimensions[dimensionName]
         }
       });
 
       var params = {
         StartTime: moment().subtract(window).toDate(),
         EndTime: new Date,
-        Namespace: metric.namespace,
-        MetricName: metric.name,
+        Namespace: board.namespace,
+        MetricName: board.name,
         Period: period.asSeconds(),
-        Statistics: [metric.aggregation],
+        Statistics: [board.aggregation],
         Dimensions: dimensions
       };
 
       var deferred = $q.defer();
-      cw.getMetricStatistics(params, function (error, data) {
-        if (error) {
-          deferred.reject(error);
-        } else {
-          data.Datapoints.sort(function (a, b) {
-            return a.Timestamp - b.Timestamp;
-          });
-          deferred.resolve(data);
-        }
+      cw.getMetricStatistics(params, Util.awsResponseToDeferred(deferred));
+      return Util.thenPromiseSuccess(deferred.promise, function (data) {
+        data.Datapoints.sort(function (a, b) {
+          return a.Timestamp - b.Timestamp;
+        });
+        return data;
       });
-      return deferred.promise;
     };
 
     return Metrics;

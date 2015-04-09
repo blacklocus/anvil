@@ -5,6 +5,41 @@ Vis.Util = new function () {
     console.error(error.stack);
   };
 
+  Util.awsResponseHandler = function(successFn) {
+    return function (error, data) {
+      if (error) {
+        console.log(error.stack ? error.stack : error);
+      } else {
+        successFn(data);
+      }
+    }
+  };
+
+  Util.awsResponseToDeferred = function (deferred) {
+    return function (error, data) {
+      if (error) {
+        console.log(error.stack ? error.stack : error);
+        deferred.reject(error);
+      } else {
+        deferred.resolve(data);
+      }
+    }
+  };
+
+  Util.thenPromiseSuccess = function(promise, successFn) {
+    return promise.then(successFn, function (error) {
+      console.log(error.stack ? error.stack : error);
+    })
+  };
+
+  Util.thenPromiseSuccessOrAlert = function (promise, successFn) {
+    return promise.then(successFn, function (error) {
+      var reportableError = error.stack ? error.stack : error;
+      console.log(reportableError);
+      alert(reportableError);
+    })
+  };
+
   Util.maxDuration = function (durations) {
     var max = durations[0];
     for (var i = 1; i < durations.length; i++) {
@@ -24,4 +59,5 @@ Vis.Util = new function () {
   Util.toDurations = function (strs) {
     return strs.map(Util.toDuration);
   };
+
 };

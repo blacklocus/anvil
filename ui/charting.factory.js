@@ -2,13 +2,13 @@
   VisApp.factory('Charting', Charting);
 
   function Charting() {
-    var Charting = this;
+    var factory = this;
 
-    Charting.toFlotData = function (board, cloudWatchMetrics) {
+    factory.toFlotData = function (boards, cloudWatchMetrics) {
 
       var data = [];
       for (var i = 0; i < cloudWatchMetrics.length; i++) {
-        var thing = board.things[i];
+        var thing = boards[i];
         var metric = cloudWatchMetrics[i];
         var series = makeSeries(thing, metric);
         data.push({
@@ -26,7 +26,7 @@
 
     };
 
-    return Charting;
+    return factory;
   }
 
 }());
