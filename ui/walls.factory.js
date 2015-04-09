@@ -50,23 +50,23 @@
 
     factory.saveNew = function (wall) {
 
-      if (!wall.created) {
-        wall.created = moment().toISOString();
+      if (!wallCtrl.created) {
+        wallCtrl.created = moment().toISOString();
       }
-      wall.modifier = User.current();
-      wall.modified = moment().toISOString();
+      wallCtrl.modifier = User.current();
+      wallCtrl.modified = moment().toISOString();
 
-      factory.validateForSave(wall);
+      factory.validateForSave(wallCtrl);
 
       var deferred = $q.defer();
 
-      var key = Vis.CFG.aws.wallsPrefix + wall.name;
+      var key = Vis.CFG.aws.wallsPrefix + wallCtrl.name;
       Util.thenPromiseSuccess(exists(key), function (exists) {
         if (exists) {
           deferred.reject('A new wall cannot be created because one already exists by this name.');
 
         } else {
-          var json = JSON.stringify(wall, null, 2);
+          var json = JSON.stringify(wallCtrl, null, 2);
           s3.putObject({
             Bucket: Vis.CFG.aws.wallsBucket,
             Key: key,

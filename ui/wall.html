@@ -1,40 +1,44 @@
-<div ng-controller="WallCtrl as wall">
+<div ng-controller="WallCtrl as wallCtrl">
 
   <a ui-sref="walls">back the list of walls (the wall wall)</a>
 
-  <div class="row">
-    <div id="chart-ctn" style="width:100%; height:400px;"></div>
-  </div>
+  <div ng-repeat="board in wallCtrl.viewedWall.boards" ng-controller="BoardCtrl as boardCtrl">
 
-  <div class="form form-inline">
     <div class="row">
+      <div id="chart-ctn" style="width:100%; height:400px;"></div>
+    </div>
+
+    <div class="form form-inline">
+      <div class="row">
     <span class="col-xs-3 text-right">
-      window of <strong>{{ wall.windowOpts[wall.selectedWindowIdx].humanize() }}</strong>
+      window of <strong>{{ board.windowOpts[board.selectedWindowIdx].humanize() }}</strong>
     </span>
     <span class="col-xs-9">
-      <input type="range" min="0" max="{{ wall.windowOpts.length - 1 }}"
-             ng-model="vis.selectedWindowIdx" ng-change="wall.windowUpdated()"/>
+      <input type="range" min="0" max="{{ board.windowOpts.length - 1 }}"
+             ng-model="vis.selectedWindowIdx" ng-change="board.windowUpdated()"/>
     </span>
-    </div>
-    <div class="row">
+      </div>
+      <div class="row">
     <span class="col-xs-3 text-right" style="border-bottom: 1px lightgray solid;">
-      / periods of <strong>{{ wall.periodOpts[wall.selectedPeriodIdx].humanize() }}</strong>
+      / periods of <strong>{{ board.periodOpts[board.selectedPeriodIdx].humanize() }}</strong>
     </span>
     <span class="col-xs-9">
-      <input type="range" min="0" max="{{ wall.periodOpts.length - 1 }}"
-             ng-model="vis.selectedPeriodIdx" ng-change="wall.periodUpdated()"/>
+      <input type="range" min="0" max="{{ board.periodOpts.length - 1 }}"
+             ng-model="vis.selectedPeriodIdx" ng-change="board.periodUpdated()"/>
     </span>
-    </div>
-    <div class="row">
+      </div>
+      <div class="row">
     <span class="col-xs-3 text-right">
-      = up to <strong>{{ wall.windowOpts[wall.selectedWindowIdx] / wall.periodOpts[wall.selectedPeriodIdx] }}</strong> data
+      = up to <strong>{{ board.windowOpts[board.selectedWindowIdx] / board.periodOpts[board.selectedPeriodIdx] }}</strong> data
       points
     </span>
-      <aside class="col-xs-9">
-        ⇐ The sliders maintain a reasonable number of data points with respect to one another, in the range of
-        <code>[ {{ wall.minDataPoints }}, {{ wall.maxDataPoints }} ]</code>
-      </aside>
+        <aside class="col-xs-9">
+          ⇐ The sliders maintain a reasonable number of data points with respect to one another, in the range of
+          <code>[ {{ board.minDataPoints }}, {{ board.maxDataPoints }} ]</code>
+        </aside>
+      </div>
     </div>
+
   </div>
 
 </div>

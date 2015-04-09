@@ -40,11 +40,11 @@
     };
 
     vm.destroyWall = function (wall) {
-      if(confirm("Are you sure you want to destroy wall '" + wall.name + "'?")) {
+      if(confirm("Are you sure you want to destroy wall '" + wallCtrl.name + "'?")) {
         // Immediately prevent other actions while we do the delete and refresh.
         vm.list = [];
         vm.listLoading = true;
-        Util.thenPromiseSuccessOrAlert(Walls.destroy(wall.name), function () {
+        Util.thenPromiseSuccessOrAlert(Walls.destroy(wallCtrl.name), function () {
           vm.refreshList();
         });
       }
