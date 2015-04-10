@@ -8,35 +8,50 @@
       <div id="chart-ctn" style="width:100%; height:400px;"></div>
     </div>
 
-    <div class="form form-inline">
-      <div class="row">
-    <span class="col-xs-3 text-right">
-      window of <strong>{{ boardCtrl.windowOpts[boardCtrl.selectedWindowIdx].humanize() }}</strong>
-    </span>
-    <span class="col-xs-9">
-      <input type="range" min="0" max="{{ boardCtrl.windowOpts.length - 1 }}"
-             ng-model="boardCtrl.selectedWindowIdx" ng-change="boardCtrl.windowUpdated()"/>
-    </span>
+
+    <div class="row">
+
+      <div class="col-sm-9">
+        <div class="row">
+          <span class="col-sm-4 text-right">
+            window of <strong>{{ boardCtrl.windowOpts[boardCtrl.selectedWindowIdx].humanize() }}</strong>
+          </span>
+          <span class="col-sm-8">
+            <input type="range" min="0" max="{{ boardCtrl.windowOpts.length - 1 }}"
+                   ng-disabled="boardCtrl.busy"
+                   ng-model="boardCtrl.selectedWindowIdx" ng-change="boardCtrl.windowUpdated(); boardCtrl.refresh()"/>
+          </span>
+        </div>
+        <div class="row">
+          <span class="col-sm-4 text-right" style="border-bottom: 1px lightgray solid;">
+            / periods of <strong>{{ boardCtrl.periodOpts[boardCtrl.selectedPeriodIdx].humanize() }}</strong>
+          </span>
+          <span class="col-sm-8">
+            <input type="range" min="0" max="{{ boardCtrl.periodOpts.length - 1 }}"
+                   ng-disabled="boardCtrl.busy"
+                   ng-model="boardCtrl.selectedPeriodIdx" ng-change="boardCtrl.periodUpdated(); boardCtrl.refresh()"/>
+          </span>
+        </div>
+        <div class="row">
+          <span class="col-sm-4 text-right">
+            = up to <strong>{{ boardCtrl.selectedWindow() / boardCtrl.selectedPeriod() }}</strong> data points
+          </span>
+          <aside class="col-sm-8">
+            ⇐ The sliders automatically adjust to maintain a reasonable number of data points
+            ({{ boardCtrl.minDataPoints }} - {{ boardCtrl.maxDataPoints }}).
+          </aside>
+        </div>
       </div>
-      <div class="row">
-    <span class="col-xs-3 text-right" style="border-bottom: 1px lightgray solid;">
-      / periods of <strong>{{ boardCtrl.periodOpts[boardCtrl.selectedPeriodIdx].humanize() }}</strong>
-    </span>
-    <span class="col-xs-9">
-      <input type="range" min="0" max="{{ boardCtrl.periodOpts.length - 1 }}"
-             ng-model="boardCtrl.selectedPeriodIdx" ng-change="boardCtrl.periodUpdated()"/>
-    </span>
+
+      <div class="col-sm-3">
+        <button type="button" class="btn btn-warning" style="white-space: normal;"
+                ng-disabled="boardCtrl.busy"
+                ng-show="boardCtrl.busy || boardCtrl.selectedWindowDiffers() || boardCtrl.selectedPeriodDiffers()"
+                ng-click="boardCtrl.saveWindowAndPeriod()">
+          Save as default
+        </button>
       </div>
-      <div class="row">
-    <span class="col-xs-3 text-right">
-      = up to <strong>{{ boardCtrl.windowOpts[boardCtrl.selectedWindowIdx] /
-      boardCtrl.periodOpts[boardCtrl.selectedPeriodIdx] }}</strong> data points
-    </span>
-        <aside class="col-xs-9">
-          ⇐ The sliders maintain a reasonable number of data points with respect to one another, in the range of
-          <code>[ {{ boardCtrl.minDataPoints }}, {{ boardCtrl.maxDataPoints }} ]</code>
-        </aside>
-      </div>
+
     </div>
 
   </div>

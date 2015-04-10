@@ -37,46 +37,27 @@
       return {
         name: '',
         creator: User.current(),
-        created: '',
-        modifier: '',
-        modified: '',
+        created: moment().toISOString(),
+        modifier: User.current(),
+        modified: moment().toISOString(),
         boards: []
       }
     };
 
     factory.validateForSave = function (wall) {
-      // TODO
+      var failures = {};
+      if (!wall.name) {
+        failures.name = 'name is required'
+      }
+      return failures;
     };
 
     factory.saveNew = function (wall) {
+      return save(wall, true);
+    };
 
-      if (!wallCtrl.created) {
-        wallCtrl.created = moment().toISOString();
-      }
-      wallCtrl.modifier = User.current();
-      wallCtrl.modified = moment().toISOString();
-
-      factory.validateForSave(wallCtrl);
-
-      var deferred = $q.defer();
-
-      var key = Vis.CFG.aws.wallsPrefix + wallCtrl.name;
-      Util.thenPromiseSuccess(exists(key), function (exists) {
-        if (exists) {
-          deferred.reject('A new wall cannot be created because one already exists by this name.');
-
-        } else {
-          var json = JSON.stringify(wallCtrl, null, 2);
-          s3.putObject({
-            Bucket: Vis.CFG.aws.wallsBucket,
-            Key: key,
-            Body: json,
-            ContentType: 'application/json'
-          }, Util.awsResponseToDeferred(deferred));
-        }
-      });
-
-      return deferred.promise;
+    factory.update = function (wall) {
+      return save(wall, false);
     };
 
     factory.destroy = function (name) {
@@ -113,7 +94,7 @@
       s3.getObject({
         Bucket: Vis.CFG.aws.wallsBucket,
         Key: key
-      }, function (error, data) {
+      }, function (error) {
         if (error) {
           if (error.code = 'NoSuchKey') {
             console.log('The aws-js-sdk might have consoled an error prior to this message. ',
@@ -130,6 +111,49 @@
       return deferred.promise;
     }
 
+    function save(wall, createOnly) {
+
+      if (!wall.created) {
+        wall.created = moment().toISOString();
+      }
+      wall.modifier = User.current();
+      wall.modified = moment().toISOString();
+
+      var deferred = $q.defer();
+
+      var failures = factory.validateForSave(wall);
+      if (Object.keys(failures).length) {
+        deferred.reject(failures);
+        return deferred.promise;
+      }
+
+      var key = Vis.CFG.aws.wallsPrefix + wall.name;
+      if (createOnly) {
+        Util.thenPromiseSuccess(exists(key), function (exists) {
+          if (exists) {
+            deferred.reject('A new wall cannot be created because one already exists by this name.');
+          } else {
+            doActualSave();
+          }
+        });
+
+      } else {
+        doActualSave();
+      }
+
+      return deferred.promise;
+
+
+      function doActualSave() {
+        var json = JSON.stringify(wall, null, 2);
+        s3.putObject({
+          Bucket: Vis.CFG.aws.wallsBucket,
+          Key: key,
+          Body: json,
+          ContentType: 'application/json'
+        }, Util.awsResponseToDeferred(deferred));
+      }
+    }
   }
 
 }());

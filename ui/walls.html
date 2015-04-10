@@ -22,9 +22,9 @@
     <tr ng-show="wallsCtrl.listLoading">
       <td colspan="5"><i class="fa fa-spinner fa-spin"></i> loading</td>
     </tr>
-    <tr class="bg-success" ng-show="wallsCtrl.editingNewWall" ng-model="walls.newWall">
+    <tr class="bg-success" ng-show="wallsCtrl.editingNewWall">
       <td>
-        <input type="text" class="form-control" ng-model="walls.newWall.name"/>
+        <input type="text" class="form-control" ng-model="wallsCtrl.newWall.name"/>
       </td>
       <td>{{ wallsCtrl.newWall.boards.length }}</td>
       <td>{{ wallsCtrl.newWall.created }}</td>
@@ -36,16 +36,16 @@
         </button>
       </td>
     </tr>
-    <tr ng-repeat="wallCtrl in wallsCtrl.list">
-      <td>{{ wallCtrl.name }}</td>
-      <td>{{ wallCtrl.boards.length }}</td>
-      <td>{{ wallCtrl.created }}</td>
-      <td>{{ wallCtrl.modified }}</td>
+    <tr ng-repeat="wall in wallsCtrl.list">
+      <td>{{ wall.name }}</td>
+      <td>{{ wall.boards.length }}</td>
+      <td>{{ wall.created }}</td>
+      <td>{{ wall.modified }}</td>
       <td>
-        <button type="button" class="btn btn-info" ui-sref="wall({name: wall.name})">Wall Up
+        <button type="button" class="btn btn-info" ui-sref="wall({name: wall.name})">View
         </button>
         <button type="button" class="btn btn-danger btn-sm pull-right"
-                ng-click="wallsCtrl.destroyWall(wallCtrl)">Demolish
+                ng-click="wallsCtrl.destroyWall(wall)">Demolish
         </button>
       </td>
     </tr>

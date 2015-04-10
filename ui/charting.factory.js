@@ -12,7 +12,7 @@
         var metric = cloudWatchMetrics[i];
         var series = makeSeries(metricDescriptor, metric);
         data.push({
-          label: metricDescriptor.name,
+          label: metricDescriptor.aggregation + ' ' + metricDescriptor.name,
           data: series
         });
       }

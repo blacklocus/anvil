@@ -5,7 +5,7 @@ Vis.Util = new function () {
     console.error(error.stack);
   };
 
-  Util.awsResponseHandler = function(successFn) {
+  Util.awsResponseHandler = function (successFn) {
     return function (error, data) {
       if (error) {
         console.log(error.stack ? error.stack : error);
@@ -26,7 +26,7 @@ Vis.Util = new function () {
     }
   };
 
-  Util.thenPromiseSuccess = function(promise, successFn) {
+  Util.thenPromiseSuccess = function (promise, successFn) {
     return promise.then(successFn, function (error) {
       console.log(error.stack ? error.stack : error);
     })
@@ -34,7 +34,7 @@ Vis.Util = new function () {
 
   Util.thenPromiseSuccessOrAlert = function (promise, successFn) {
     return promise.then(successFn, function (error) {
-      var reportableError = error.stack ? error.stack : error;
+      var reportableError = error.stack ? error.stack : (typeof error === 'object' ? JSON.stringify(error, null, 2) : error);
       console.log(reportableError);
       alert(reportableError);
     })
@@ -60,4 +60,15 @@ Vis.Util = new function () {
     return strs.map(Util.toDuration);
   };
 
+  var timeUnits = ['year', 'month', 'week', 'day', 'hour', 'minute'];
+
+  Util.toMostSignificantTimeUnit = function (duration) {
+    var unit = timeUnits[0];
+    var val = duration.as(unit);
+    for (var i = 1; val < 1 && i < timeUnits.length; i++) {
+      unit = timeUnits[i];
+      val = duration.as(unit);
+    }
+    return val + ' ' + unit + (val > 1 ? 's' : '');
+  };
 };
