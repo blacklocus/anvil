@@ -57,7 +57,11 @@
         window = vm.selectedWindow();
       }
     };
-    vm.refresh = _.debounce(refresh, 500);
+    var debouncedRefresh = _.debounce(refresh, 500);
+    vm.refresh = function () {
+      vm.busy = true;
+      debouncedRefresh();
+    };
 
     vm.selectedWindowDiffers = function () {
       return 0 !== vm.selectedWindow() - Util.toDuration(board.window);
