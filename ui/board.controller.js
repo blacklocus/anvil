@@ -57,9 +57,7 @@
         window = vm.selectedWindow();
       }
     };
-    vm.refresh = _.debounce(function () {
-      refresh();
-    }, 500);
+    vm.refresh = _.debounce(refresh, 500);
 
     vm.selectedWindowDiffers = function () {
       return 0 !== vm.selectedWindow() - Util.toDuration(board.window);
@@ -76,26 +74,6 @@
         vm.busy = false;
       });
     };
-
-    var flot = $('#chart-ctn')
-        .plot([], {
-          legend: {
-            show: true
-          },
-          xaxis: {
-            tickFormatter: function (val) {
-              return moment(val).format('HH:mm');
-            }
-          }
-        })
-        .data('plot');
-
-    // Stay with window size.
-    $(window).resize(function () {
-      flot.resize();
-      flot.setupGrid();
-      flot.draw();
-    });
 
     initialize();
 
@@ -115,12 +93,34 @@
         --vm.selectedPeriodIdx;
       }
 
+      vm.flot = $('#chart-ctn')
+          .plot([], {
+            legend: {
+              show: true
+            },
+            xaxis: {
+              tickFormatter: function (val) {
+                return moment(val).format('HH:mm');
+              }
+            }
+          })
+          .data('plot');
+
+      // Stay with window size.
+      $(window).resize(function () {
+        vm.flot.resize();
+        vm.flot.setupGrid();
+        vm.flot.draw();
+      });
+
       refresh();
     }
 
-    refresh.counter = 0;
     function refresh() {
+      vm.busy = true;
+      refresh.counter = refresh.counter || 0;
       var requestId = ++refresh.counter;
+
       $q.all(board.metrics
           .map(function (metricDescriptor) {
             return Metrics.dataOf(metricDescriptor, vm.selectedWindow(), vm.selectedPeriod());
@@ -129,12 +129,15 @@
             if (refresh.counter == requestId) {
               var flotData = Charting.toFlotData(board.metrics, metrics);
 
-              flot.setData(flotData);
-              flot.setupGrid();
-              flot.draw();
+              vm.flot.setData(flotData);
+              vm.flot.setupGrid();
+              vm.flot.draw();
             }
 
-          }, Util.defaultErrorHandler);
+          }, Util.defaultErrorHandler)
+          .finally(function () {
+            vm.busy = false;
+          });
     }
   }
 }());

@@ -1,9 +1,23 @@
 * {
     /* keep it sharp */
-    border-radius: 0 !important;
+    border-radius : 0 !important;
 }
-
 code {
     /* don't chop <code> sequences into pieces */
-    white-space: nowrap;
+    white-space : nowrap;
 }
+.overlayable {
+    position : relative;
+}
+.overlay {
+    position         : absolute;
+    text-align       : center;
+    background-color : rgba(95, 94, 165, 0.20);
+    top              : 0;
+    left             : 0;
+    right            : 0;
+    bottom           : 0;
+    color            : rgba(95, 94, 165, 0.80);
+    font-size        : 10em;
+}
+
