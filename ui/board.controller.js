@@ -99,6 +99,9 @@
 
       vm.flot = $('#chart-ctn')
           .plot([], {
+            grid: {
+              hoverable: true
+            },
             legend: {
               show: true
             },
