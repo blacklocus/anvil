@@ -19,6 +19,8 @@
 
     vm.busy = false;
 
+    vm.editing = false;
+
     vm.selectedWindow = function () {
       return vm.windowOpts[vm.selectedWindowIdx];
     };
@@ -79,6 +81,14 @@
       });
     };
 
+    vm.editorStart = function () {
+      vm.editing = true;
+    };
+
+    vm.editorCancel = function () {
+      vm.editing = false;
+    };
+
     initialize();
 
 
@@ -107,8 +117,12 @@
             },
             xaxis: {
               tickFormatter: function (val) {
-                return moment(val).format('HH:mm');
+                return moment(val).format('HH:mm<br/>ddd M/D');
               }
+            },
+            tooltip: true,
+            tooltipOpts: {
+
             }
           })
           .data('plot');

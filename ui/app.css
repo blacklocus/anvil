@@ -20,4 +20,6 @@ code {
     color            : rgba(95, 94, 165, 0.80);
     font-size        : 10em;
 }
-
+.board-top {
+    border-top : 4px lightgray double;
+}

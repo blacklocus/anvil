@@ -5,13 +5,13 @@
   User.$inject = [];
 
   function User() {
-    var factory = this;
+    var User = this;
 
-    factory.current = function () {
+    User.current = function () {
       return 'root';
     };
 
-    return factory;
+    return User;
   }
 
 }());

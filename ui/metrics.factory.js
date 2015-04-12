@@ -9,6 +9,10 @@
         Util = Vis.Util,
         cw = new AWS.CloudWatch;
 
+    Metrics.search = _.debounce(function () {
+
+    }, 500);
+
     Metrics.dataOf = function (metricDescriptor, window, period) {
 
       var missing = ['namespace', 'name', 'dimensions', 'aggregation'].filter(function (el) {
