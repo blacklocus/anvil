@@ -57,8 +57,9 @@
         window = vm.selectedWindow();
       }
     };
+
     var debouncedRefresh = _.debounce(refresh, 500);
-    vm.refresh = function () {
+    vm.requestRefresh = function () {
       vm.busy = true;
       debouncedRefresh();
     };
@@ -77,6 +78,13 @@
       Util.thenPromiseSuccessOrAlert(Walls.update(wall), function () {
         vm.busy = false;
       });
+    };
+
+    vm.startEdit = function () {
+      vm.editedBoard = board;
+    };
+    vm.finishEdit = function () {
+      vm.editedBoard = null;
     };
 
     initialize();

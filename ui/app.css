@@ -23,3 +23,21 @@ code {
 .board-top {
     border-top : 4px lightgray double;
 }
+.board-editor {
+    /* flush with button */
+    margin-top : -3px;
+    border     : 1px solid #5cb85c;
+    /*background-color : #f2fff0;*/
+}
+.board-editor td .fa:hover {
+    text-decoration : none;
+    cursor          : pointer;
+}
+.search-results {
+    max-height : 400px;
+    overflow-y : scroll;
+    font-size  : 0.9em;
+}
+.search-results th {
+    background : lightgray;
+}

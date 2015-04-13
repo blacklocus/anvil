@@ -9,9 +9,22 @@
         Util = Vis.Util,
         cw = new AWS.CloudWatch;
 
-    Metrics.search = _.debounce(function () {
+    /**
+     * @param {{}} options http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/CloudWatch.html#listMetrics-property
+     * @return {[]} array of CloudWatch Metrics descriptors
+     */
+    Metrics.search = function (options) {
 
-    }, 500);
+      var deferred = $q.defer();
+
+      cw.listMetrics(options, Util.awsResponseToDeferred(deferred));
+
+      // Unwrap AWS response to array of Metrics.
+      return Util.thenPromiseSuccess(deferred.promise, function (result) {
+        return result.Metrics;
+      });
+
+    };
 
     Metrics.dataOf = function (metricDescriptor, window, period) {
 

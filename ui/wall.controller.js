@@ -43,28 +43,28 @@
     var savesRemaining = 0;
 
     var debouncedSaveWall = _.debounce(function () {
-      if (savesRemaining == 0) {
+      if (savesRemaining === 0) {
         savesRemaining = 1;
         doSave();
-      } else if (savesRemaining == 1) {
+      } else if (savesRemaining === 1) {
         savesRemaining = 2;
-      } else if (savesRemaining == 2) {
+      } else if (savesRemaining === 2) {
         // Already queued up enough. Ignore spam.
       }
 
       function doSave() {
-        if (savesRemaining) {
-          console.debug('Triggering save on', savesRemaining);
-          Util.thenPromiseSuccess(Walls.update($scope.viewedWall), function () {
-            --savesRemaining;
-            console.debug('Completed save on', savesRemaining);
-            // Loop, in case another request arrived during the previous save.
-            doSave();
-          });
-
-        } else {
+        if (!savesRemaining) {
           vm.dirty = false;
+          return;
         }
+
+        console.debug('Triggering save on', savesRemaining);
+        Util.thenPromiseSuccess(Walls.update($scope.viewedWall), function () {
+          --savesRemaining;
+          console.debug('Completed save on', savesRemaining);
+          // Loop, in case another request arrived during the previous save.
+          doSave();
+        });
       }
     }, 500);
 

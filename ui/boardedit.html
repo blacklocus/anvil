@@ -1,0 +1,62 @@
+<div id="boardedit-{{ $index }}" class="board-editor"
+     ng-controller="BoardEditCtrl as boardEditCtrl">
+
+  <div class="search-results">
+    <table class="table table-condensed" style="margin-bottom: 0;">
+      <tbody>
+      <tr>
+        <th colspan="5">current series</th>
+      </tr>
+      <tr ng-repeat="metric in boardEditCtrl.edited.metrics">
+        <td>
+          <a class="fa fa-minus-square-o" ng-click="boardEditCtrl.removeSeries(metric)"></a>
+          <select ng-model="metric.aggregation"
+                  ng-options="aggregationOpt for aggregationOpt in boardEditCtrl.aggregationOpts"
+                  ng-change="wallCtrl.requestSaveWall(); boardCtrl.requestRefresh()"></select>
+        </td>
+        <td>{{ metric.namespace }}</td>
+        <td>{{ metric.name }}</td>
+        <td>{{ boardEditCtrl.formatDimensions(metric.dimensions) }}</td>
+      </tr>
+      <tr>
+        <th colspan="5">search and add more series</th>
+      </tr>
+      <tr>
+        <td>
+          <i class="fa fa-unsorted"></i>
+        </td>
+        <td>
+          <input type="text" class="form-control input-sm" placeholder="namespace"
+                 ng-model="boardEditCtrl.search.namespace"
+                 ng-change="boardEditCtrl.requestSearch()"/>
+        </td>
+        <td>
+          <input type="text" class="form-control input-sm" placeholder="name"
+                 ng-model="boardEditCtrl.search.name"
+                 ng-change="boardEditCtrl.requestSearch()"/>
+        </td>
+        <td>
+          <input type="text" class="form-control input-sm" placeholder="dimensions"
+                 ng-model="boardEditCtrl.search.dimensions"
+                 ng-change="boardEditCtrl.requestSearch()"/>
+        </td>
+      </tr>
+      <tr ng-show="!boardEditCtrl.results.length && !boardEditCtrl.searching">
+        <td></td>
+        <td colspan="4">No search results</td>
+      </tr>
+      <tr ng-show="boardEditCtrl.searching">
+        <td></td>
+        <td colspan="4">Searching... <i class="fa fa-spinner fa-spin"></i></td>
+      </tr>
+      <tr ng-repeat="result in boardEditCtrl.results">
+        <td><a class="fa fa-plus-square-o" ng-click="boardEditCtrl.addSeries(result)"></a></td>
+        <td>{{ result.Namespace }}</td>
+        <td>{{ result.MetricName }}</td>
+        <td>{{ boardEditCtrl.formatCwDimensions(result.Dimensions) }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
