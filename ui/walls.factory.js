@@ -35,7 +35,7 @@
 
     factory.template = function () {
       return {
-        name: '',
+        name: 'Wall ' + chance.word({syllablees: Math.ceil(Math.random() * 3)}),
         creator: User.current(),
         created: moment().toISOString(),
         modifier: User.current(),
@@ -44,10 +44,23 @@
       }
     };
 
+    factory.templateBoard = function () {
+      return {
+        name: 'Board ' + chance.word({syllablees: Math.ceil(Math.random() * 3)}),
+        creator: User.current(),
+        created: moment().toISOString(),
+        modifier: User.current(),
+        modified: moment().toISOString(),
+        period: '5 minutes',
+        window: '3 hours',
+        metrics: []
+      }
+    };
+
     factory.validateForSave = function (wall) {
       var failures = {};
       if (!wall.name) {
-        failures.name = 'name is required'
+        failures.name = 'Wall name is required'
       }
       return failures;
     };
@@ -145,7 +158,7 @@
 
 
       function doActualSave() {
-        var json = JSON.stringify(wall, null, 2);
+        var json = angular.toJson(wall, 2);
         s3.putObject({
           Bucket: Vis.CFG.aws.wallsBucket,
           Key: key,

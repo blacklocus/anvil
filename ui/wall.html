@@ -1,8 +1,8 @@
-<div ng-controller="WallCtrl as wallCtrl">
-
+<div id="wallCtrl" ng-controller="WallCtrl as wallCtrl">
 
   <div class="row">
     <a ui-sref="walls">⇐ back the list of walls (the wall wall)</a>
+    <span class="pull-right" ng-show="wallCtrl.dirty"><i class="fa fa-spinner fa-spin"></i> Saving... &nbsp;</span>
 
     <div class="panel panel-primary" style="margin-bottom: 0;">
       <div class="panel-heading">
@@ -13,32 +13,17 @@
     </div>
   </div>
 
-  <div ng-repeat="board in wallCtrl.viewedWall.boards" ng-controller="BoardCtrl as boardCtrl">
+  <div id="boardCtrl-{{ $index }}" ng-repeat="board in wallCtrl.viewedWall.boards" ng-controller="BoardCtrl as boardCtrl">
 
-    <div class="row board-top">
-      <div class="col-xs-12">
-        <h3>{{ board.name }}</h3>
-
-        <div style="position: absolute; top: 0; right: 0;">
-
-          <button type="button" class="btn btn-info"
-                  ng-hide="boardCtrl.editing"
-                  ng-click="boardCtrl.editorStart()">
-            Edit this board
-          </button>
-
-          <span ng-show="boardCtrl.editing">
-            <button type="button" class="btn btn-warning btn-sm" ng-click="boardCtrl.editorCancel()">Cancel Edit</button>
-            <button type="button" class="btn btn-primary" ng-click="boardCtrl.editorSave()">Save Board</button>
-          </span>
-
-        </div>
-
-      </div>
+    <div>
+      <button type="button" class="btn btn-danger btn-sm pull-right" ng-click="wallCtrl.deleteBoard(board)">
+        <i class="fa fa-trash"></i>
+      </button>
+      <h3>{{ board.name }}</h3>
     </div>
 
     <div class="row overlayable">
-      <div id="chart-ctn" style="width: 100%; height:400px;"></div>
+      <div data-vis="chart-ctn" style="width: 100%; height:400px;"></div>
       <div class="overlay" ng-show="boardCtrl.busy"><i class="fa fa-spinner fa-spin"></i></div>
     </div>
 
@@ -93,7 +78,7 @@
     <div class="btn-block">
       <button type="button" class="btn btn-success btn-large col-xs-offset-1 col-xs-10"
               ng-disabled="wallCtrl.loading"
-              ng-click="wallCtrl.addNewBoard()">
+              ng-click="wallCtrl.addBoard()">
         <i class="fa fa-plus"></i>
         Add Another Board
         <i class="fa fa-plus"></i>

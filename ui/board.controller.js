@@ -2,9 +2,9 @@
 
   VisApp.controller('BoardCtrl', BoardCtrl);
 
-  BoardCtrl.$inject = ['$scope', '$q', 'Metrics', 'Charting', 'Walls'];
+  BoardCtrl.$inject = ['$scope', '$q', '$element', 'Metrics', 'Charting', 'Walls'];
 
-  function BoardCtrl($scope, $q, Metrics, Charting, Walls) {
+  function BoardCtrl($scope, $q, $element, Metrics, Charting, Walls) {
     var vm = this,
         wall = $scope.wallCtrl.viewedWall,
         board = $scope.board,
@@ -18,8 +18,6 @@
     vm.periodOpts = Util.toDurations(['1 day', '6 hours', '1 hour', '15 minutes', '5 minutes', '1 minute']);
 
     vm.busy = false;
-
-    vm.editing = false;
 
     vm.selectedWindow = function () {
       return vm.windowOpts[vm.selectedWindowIdx];
@@ -81,14 +79,6 @@
       });
     };
 
-    vm.editorStart = function () {
-      vm.editing = true;
-    };
-
-    vm.editorCancel = function () {
-      vm.editing = false;
-    };
-
     initialize();
 
 
@@ -107,7 +97,7 @@
         --vm.selectedPeriodIdx;
       }
 
-      vm.flot = $('#chart-ctn')
+      vm.flot = $($element.find('[data-vis=chart-ctn]')[0])
           .plot([], {
             grid: {
               hoverable: true
