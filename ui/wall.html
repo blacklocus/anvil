@@ -7,7 +7,19 @@
     <div class="panel panel-primary" style="margin-bottom: 0;">
       <div class="panel-heading">
         <div class="panel-title">
-          <h2>{{ wallCtrl.viewedWall.name }}</h2>
+          <h2 ng-hide="wallCtrl.editingName" ng-click="wallCtrl.startRenameWall()">
+            <span data-toggle="tooltip" data-placement="right" title="Click to edit the Wall's name">
+              {{ wallCtrl.viewedWall.name }}
+            </span>
+          </h2>
+
+          <form class="form-inline" ng-show="wallCtrl.editingName"
+                ng-submit="wallCtrl.finishRenameWall()">
+            <h2>
+              <input type="text" class="form-control" ng-model="wallCtrl.viewedWall.name"
+                     ng-blur="wallCtrl.finishRenameWall()"/>
+            </h2>
+          </form>
         </div>
       </div>
     </div>
@@ -18,7 +30,6 @@
   <div class="row board-top">
     <div class="btn-block">
       <button type="button" class="btn btn-success btn-large col-xs-offset-1 col-xs-10"
-              ng-disabled="wallCtrl.loading"
               ng-click="wallCtrl.addBoard()">
         <i class="fa fa-plus"></i>
         Add Another Board

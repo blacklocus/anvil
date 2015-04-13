@@ -2,15 +2,16 @@
 
   VisApp.controller('WallCtrl', WallCtrl);
 
-  WallCtrl.$inject = ['$scope', '$state', 'Walls'];
+  WallCtrl.$inject = ['$scope', '$q', '$state', 'Walls'];
 
-  function WallCtrl($scope, $state, Walls) {
+  function WallCtrl($scope, $q, $state, Walls) {
     var vm = this,
         wallName = $state.params.name,
         Util = Vis.Util;
 
     vm.viewedWall = null;
-    vm.loading = true;
+    vm.dirty = false;
+    vm.editingName = false;
 
     vm.addBoard = function () {
       vm.viewedWall.boards.push(Walls.templateBoard());
@@ -30,11 +31,33 @@
       }
     };
 
+    var oldWallName = '';
+    vm.startRenameWall = function () {
+      oldWallName = vm.viewedWall.name;
+      vm.editingName = true;
+    };
+    vm.finishRenameWall = function () {
+      vm.editingName = false;
+
+      var deferred = $q.defer();
+      vm.requestSaveWall(deferred);
+      Util.thenPromiseSuccess(deferred.promise, function () {
+        console.info('Deleting copy of wall with old name', oldWallName);
+        vm.dirty = true;
+        Util.thenPromiseSuccess(Walls.destroy(oldWallName), function () {
+          vm.dirty = false;
+          $state.go('wall', {name: vm.viewedWall.name});
+        });
+      });
+    };
+
+
+    // Initialize tooltips
+    $('body').tooltip({selector: '[data-toggle=tooltip]'});
 
     // Get the wall definition and build the boards.
     Util.thenPromiseSuccessOrAlert(Walls.get(wallName), function (wall) {
       $scope.viewedWall = vm.viewedWall = wall;
-      vm.loading = false;
     });
 
     // 0 no saves requested nor in progress
@@ -42,7 +65,7 @@
     // 2 a save has been requested and is in progress and another later save has also been requested
     var savesRemaining = 0;
 
-    var debouncedSaveWall = _.debounce(function () {
+    var debouncedSaveWall = _.debounce(function (deferred) {
       if (savesRemaining === 0) {
         savesRemaining = 1;
         doSave();
@@ -54,6 +77,9 @@
 
       function doSave() {
         if (!savesRemaining) {
+          if (deferred) {
+            deferred.resolve();
+          }
           vm.dirty = false;
           return;
         }
@@ -68,9 +94,12 @@
       }
     }, 500);
 
-    vm.requestSaveWall = function () {
+    /**
+     * @param [deferred]
+     */
+    vm.requestSaveWall = function (deferred) {
       vm.dirty = true;
-      debouncedSaveWall();
+      debouncedSaveWall(deferred);
     };
 
   }
