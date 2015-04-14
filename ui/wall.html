@@ -1,8 +1,10 @@
 <div id="wallCtrl" ng-controller="WallCtrl as wallCtrl">
 
+  <h2 class="top-right">
+    <span class="label label-warning" ng-show="wallCtrl.dirty"><i class="fa fa-spinner fa-spin"></i> Saving... &nbsp;</span>
+  </h2>
+
   <div class="row">
-    <a ui-sref="walls">⇐ back the list of walls (the wall wall)</a>
-    <span class="pull-right" ng-show="wallCtrl.dirty"><i class="fa fa-spinner fa-spin"></i> Saving... &nbsp;</span>
 
     <div class="panel panel-primary" style="margin-bottom: 0;">
       <div class="panel-heading">
@@ -16,7 +18,8 @@
           <form class="form-inline" ng-show="wallCtrl.editingName"
                 ng-submit="wallCtrl.finishRenameWall()">
             <h2>
-              <input type="text" class="form-control" ng-model="wallCtrl.viewedWall.name"
+              <input id="edit-wall-name" type="text" class="form-control" tabindex="-1"
+                     ng-model="wallCtrl.viewedWall.name"
                      ng-blur="wallCtrl.finishRenameWall()"/>
             </h2>
           </form>

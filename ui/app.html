@@ -12,17 +12,21 @@
   <script type="text/javascript" src="lib/bower_components/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
   <script type="text/javascript" src="lib/bower_components/angular/angular.min.js"></script>
   <script type="text/javascript" src="lib/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+  <script type="text/javascript"
+          src="lib/bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
   <script type="text/javascript" src="lib/bower_components/chance/chance.js"></script>
 
   <link rel="stylesheet" href="app.css"/>
-  <script type="text/javascript" src="config.js"></script>
+  <script type="text/javascript" src="const.js"></script>
   <script type="text/javascript" src="util.js"></script>
   <script type="text/javascript" src="app.module.js"></script>
+  <script type="text/javascript" src="aws.factory.js"></script>
   <script type="text/javascript" src="user.factory.js"></script>
   <script type="text/javascript" src="metrics.factory.js"></script>
   <script type="text/javascript" src="charting.factory.js"></script>
   <script type="text/javascript" src="walls.factory.js"></script>
   <script type="text/javascript" src="root.controller.js"></script>
+  <script type="text/javascript" src="config.controller.js"></script>
   <script type="text/javascript" src="walls.controller.js"></script>
   <script type="text/javascript" src="wall.controller.js"></script>
   <script type="text/javascript" src="board.controller.js"></script>
@@ -32,6 +36,10 @@
 
 <body class="container-fluid">
 
+<div class="row">
+  <a ui-sref="config" ng-show="rootCtrl.$state.current.name === 'walls'">⇑ edit configuration</a>
+  <a ui-sref="walls" ng-show="rootCtrl.$state.current.name !== 'walls'">⇐ back the list of walls (the wall wall)</a>
+</div>
 
 
 <div ui-view></div>

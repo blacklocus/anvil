@@ -1,5 +1,5 @@
 {
-  "name": "visibility",
+  "name": "anvil",
   "version": "0.0.0",
   "authors": [
     "Jason Dunkelberger (dirkraft) <dirkraft@gmail.com>"
@@ -23,6 +23,7 @@
     "angular-ui-router": "~0.2.13",
     "flot.tooltip": "~0.8.4",
     "lodash": "~3.6.0",
-    "chance": "~0.7.3"
+    "chance": "~0.7.3",
+    "angular-local-storage": "~0.1.5"
   }
 }

@@ -6,7 +6,7 @@
 
   function BoardEditCtrl($scope, Metrics) {
     var vm = this,
-        Util = Vis.Util;
+        Util = Anvil.Util;
 
     vm.aggregationOpts = ['SampleCount', 'Average', 'Sum', 'Minimum', 'Maximum'];
 

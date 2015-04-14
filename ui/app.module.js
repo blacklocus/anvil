@@ -1,13 +1,13 @@
-AnvilApp = angular.module('AnvilApp', ['ui.router']);
+AnvilApp = angular.module('AnvilApp', ['ui.router', 'LocalStorageModule']);
 
 AnvilApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 
   $urlRouterProvider.otherwise("/walls");
 
   $stateProvider
-      .state('configure', {
-        url: '/configure',
-        templateUrl: 'configure.html'
+      .state('config', {
+        url: '/config',
+        templateUrl: 'config.html'
       })
       .state('walls', {
         url: '/walls',
@@ -20,7 +20,9 @@ AnvilApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvide
 }]);
 
 AnvilApp.run(['$rootScope', '$state', 'User', function ($rootScope, $state, User) {
-  $rootScope.$on('$locationChangeSuccess', function() {
-    //$state.go('configure');
+  $rootScope.$on('$locationChangeSuccess', function () {
+    User.testCredentials().then(function () {}, function () {
+      $state.go('config');
+    });
   });
 }]);

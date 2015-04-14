@@ -8,7 +8,7 @@
     var vm = this,
         wall = $scope.wallCtrl.viewedWall,
         board = $scope.board,
-        Util = Vis.Util;
+        Util = Anvil.Util;
 
     vm.minDataPoints = 10;
     vm.maxDataPoints = 1000;
@@ -74,10 +74,7 @@
     vm.saveWindowAndPeriod = function () {
       board.window = Util.toMostSignificantTimeUnit(vm.selectedWindow());
       board.period = Util.toMostSignificantTimeUnit(vm.selectedPeriod());
-      vm.busy = true;
-      Util.thenPromiseSuccessOrAlert(Walls.update(wall), function () {
-        vm.busy = false;
-      });
+      $scope.wallCtrl.requestSaveWall();
     };
 
     vm.startEdit = function () {

@@ -6,7 +6,7 @@
 
   function WallsCtrl(Walls) {
     var vm = this,
-        Util = Vis.Util;
+        Util = Anvil.Util;
 
     vm.list = [];
     vm.listLoading = false;

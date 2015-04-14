@@ -18,9 +18,9 @@
       }
       return data;
 
-      function makeSeries(thing, metric) {
+      function makeSeries(metricDescriptor, metric) {
         return metric.Datapoints.map(function (point) {
-          return [point.Timestamp, point[thing.aggregation]];
+          return [point.Timestamp, point[metricDescriptor.aggregation]];
         });
       }
 

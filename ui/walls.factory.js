@@ -2,24 +2,24 @@
 
   AnvilApp.factory('Walls', Walls);
 
-  Walls.$inject = ['$q', 'User'];
+  Walls.$inject = ['$q', 'User', 'AwsBanana'];
 
-  function Walls($q, User) {
-    var factory = this,
-        Util = Vis.Util,
-        s3 = new AWS.S3;
+  function Walls($q, User, AwsBanana) {
+    var Walls = this,
+        Const = Anvil.Const,
+        Util = Anvil.Util;
 
-    factory.get = function (name) {
-      return read(Vis.CFG.aws.wallsPrefix + name);
+    Walls.get = function (name) {
+      return read(Const.wallsPrefix + name);
     };
 
     // TODO handle multiple pages
-    factory.list = function () {
+    Walls.list = function () {
       var deferred = $q.defer();
 
-      s3.listObjects({
-        Bucket: Vis.CFG.aws.wallsBucket,
-        Prefix: Vis.CFG.aws.wallsPrefix
+      AwsBanana.s3.listObjects({
+        Bucket: Const.wallsBucket,
+        Prefix: Const.wallsPrefix
       }, Util.awsResponseToDeferred(deferred));
 
       return Util.thenPromiseSuccess(deferred.promise, function (data) {
@@ -33,7 +33,7 @@
       });
     };
 
-    factory.template = function () {
+    Walls.template = function () {
       return {
         name: 'Wall ' + chance.word({syllablees: Math.ceil(Math.random() * 3)}),
         creator: User.current().name,
@@ -44,7 +44,7 @@
       }
     };
 
-    factory.templateBoard = function () {
+    Walls.templateBoard = function () {
       return {
         name: 'Board ' + chance.word({syllablees: Math.ceil(Math.random() * 3)}),
         creator: User.current().name,
@@ -57,7 +57,7 @@
       }
     };
 
-    factory.validateForSave = function (wall) {
+    Walls.validateForSave = function (wall) {
       var failures = {};
       if (!wall.name) {
         failures.name = 'Wall name is required'
@@ -65,34 +65,34 @@
       return failures;
     };
 
-    factory.saveNew = function (wall) {
+    Walls.saveNew = function (wall) {
       return save(wall, true);
     };
 
-    factory.update = function (wall) {
+    Walls.update = function (wall) {
       return save(wall, false);
     };
 
-    factory.destroy = function (name) {
+    Walls.destroy = function (name) {
 
       var deferred = $q.defer();
 
-      s3.deleteObject({
-        Bucket: Vis.CFG.aws.wallsBucket,
-        Key: Vis.CFG.aws.wallsPrefix + name
+      AwsBanana.s3.deleteObject({
+        Bucket: Const.wallsBucket,
+        Key: Const.wallsPrefix + name
       }, Util.awsResponseToDeferred(deferred));
 
       return deferred.promise;
     };
 
-    return factory;
+    return Walls;
 
 
     function read(key) {
       var deferred = $q.defer();
 
-      s3.getObject({
-        Bucket: Vis.CFG.aws.wallsBucket,
+      AwsBanana.s3.getObject({
+        Bucket: Const.wallsBucket,
         Key: key
       }, Util.awsResponseToDeferred(deferred));
 
@@ -104,8 +104,8 @@
     function exists(key) {
       var deferred = $q.defer();
 
-      s3.getObject({
-        Bucket: Vis.CFG.aws.wallsBucket,
+      AwsBanana.s3.getObject({
+        Bucket: Const.wallsBucket,
         Key: key
       }, function (error) {
         if (error) {
@@ -134,13 +134,13 @@
 
       var deferred = $q.defer();
 
-      var failures = factory.validateForSave(wall);
+      var failures = Walls.validateForSave(wall);
       if (Object.keys(failures).length) {
         deferred.reject(failures);
         return deferred.promise;
       }
 
-      var key = Vis.CFG.aws.wallsPrefix + wall.name;
+      var key = Const.wallsPrefix + wall.name;
       if (createOnly) {
         Util.thenPromiseSuccess(exists(key), function (exists) {
           if (exists) {
@@ -159,8 +159,8 @@
 
       function doActualSave() {
         var json = angular.toJson(wall, 2);
-        s3.putObject({
-          Bucket: Vis.CFG.aws.wallsBucket,
+        AwsBanana.s3.putObject({
+          Bucket: Const.wallsBucket,
           Key: key,
           Body: json,
           ContentType: 'application/json'

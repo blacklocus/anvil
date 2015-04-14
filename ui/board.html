@@ -60,8 +60,7 @@
 
     <div class="col-sm-3">
       <button type="button" class="btn btn-warning" style="white-space: normal;"
-              ng-disabled="boardCtrl.busy"
-              ng-show="boardCtrl.busy || boardCtrl.selectedWindowDiffers() || boardCtrl.selectedPeriodDiffers()"
+              ng-show="boardCtrl.selectedWindowDiffers() || boardCtrl.selectedPeriodDiffers()"
               ng-click="boardCtrl.saveWindowAndPeriod()">
         Save as default
       </button>

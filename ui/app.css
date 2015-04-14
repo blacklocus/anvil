@@ -6,6 +6,21 @@ code {
     /* don't chop <code> sequences into pieces */
     white-space : nowrap;
 }
+label {
+    /* don't really like bootstrap bold labels */
+    font-weight: normal;
+}
+.auth-not-selected {
+    opacity : 0.5;
+}
+.top-right {
+    position: fixed;
+    margin-top: 0;
+    margin-right: 0;
+    top: 0;
+    right: 0;
+    z-index: 1;
+}
 .overlayable {
     position : relative;
 }

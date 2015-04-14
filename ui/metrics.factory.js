@@ -1,13 +1,12 @@
 (function () {
   AnvilApp.factory('Metrics', Metrics);
 
-  Metrics.$inject = ['$q'];
+  Metrics.$inject = ['$q', 'AwsBanana'];
 
-  function Metrics($q) {
+  function Metrics($q, AwsBanana) {
 
     var Metrics = this,
-        Util = Vis.Util,
-        cw = new AWS.CloudWatch;
+        Util = Anvil.Util;
 
     /**
      * @param {{}} options http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/CloudWatch.html#listMetrics-property
@@ -17,7 +16,7 @@
 
       var deferred = $q.defer();
 
-      cw.listMetrics(options, Util.awsResponseToDeferred(deferred));
+      AwsBanana.cw.listMetrics(options, Util.awsResponseToDeferred(deferred));
 
       // Unwrap AWS response to array of Metrics.
       return Util.thenPromiseSuccess(deferred.promise, function (result) {
@@ -60,7 +59,7 @@
       };
 
       var deferred = $q.defer();
-      cw.getMetricStatistics(params, Util.awsResponseToDeferred(deferred));
+      AwsBanana.cw.getMetricStatistics(params, Util.awsResponseToDeferred(deferred));
       return Util.thenPromiseSuccess(deferred.promise, function (data) {
         data.Datapoints.sort(function (a, b) {
           return a.Timestamp - b.Timestamp;

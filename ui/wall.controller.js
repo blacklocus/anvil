@@ -7,7 +7,7 @@
   function WallCtrl($scope, $q, $state, Walls) {
     var vm = this,
         wallName = $state.params.name,
-        Util = Vis.Util;
+        Util = Anvil.Util;
 
     vm.viewedWall = null;
     vm.dirty = false;
@@ -34,16 +34,24 @@
     var oldWallName = '';
     vm.startRenameWall = function () {
       oldWallName = vm.viewedWall.name;
+      setTimeout(function () {
+        angular.element('#edit-wall-name').focus().select();
+      }, 100);
       vm.editingName = true;
     };
     vm.finishRenameWall = function () {
       vm.editingName = false;
+      vm.viewedWall.name = vm.viewedWall.name.trim();
+      if (oldWallName === vm.viewedWall.name) {
+        return;
+      }
+      vm.dirty = true;
 
       var deferred = $q.defer();
       vm.requestSaveWall(deferred);
       Util.thenPromiseSuccess(deferred.promise, function () {
+        vm.dirty = true; // still processing
         console.info('Deleting copy of wall with old name', oldWallName);
-        vm.dirty = true;
         Util.thenPromiseSuccess(Walls.destroy(oldWallName), function () {
           vm.dirty = false;
           $state.go('wall', {name: vm.viewedWall.name});

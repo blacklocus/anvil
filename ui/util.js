@@ -1,4 +1,6 @@
-Vis.Util = new function () {
+var Anvil = Anvil || {};
+
+Anvil.Util = new function () {
   var Util = this;
 
   Util.defaultErrorHandler = function (error) {
@@ -16,9 +18,11 @@ Vis.Util = new function () {
   };
 
   Util.awsResponseToDeferred = function (deferred) {
+    var originalStack = Error('original stack').stack;
     return function (error, data) {
       if (error) {
-        console.log(error.stack ? error.stack : error);
+        console.error(error.stack ? error.stack : error);
+        console.error(originalStack);
         deferred.reject(error);
       } else {
         deferred.resolve(data);
@@ -27,8 +31,10 @@ Vis.Util = new function () {
   };
 
   Util.thenPromiseSuccess = function (promise, successFn) {
+    var originalStack = Error('original stack').stack;
     return promise.then(successFn, function (error) {
-      console.log(error.stack ? error.stack : error);
+      console.error(error.stack ? error.stack : error);
+      console.error(originalStack);
     })
   };
 
