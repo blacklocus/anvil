@@ -44,6 +44,7 @@
       // TODO This doesn't validate the region
       AwsBanana.s3.listObjects({
         Bucket: Const.wallsBucket,
+        Prefix: Const.wallsPrefix,
         MaxKeys: 0
       }, Util.awsResponseToDeferred(deferred));
 

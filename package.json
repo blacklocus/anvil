@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/blacklocus/anvil",
   "devDependencies": {
+    "bower": "^1.4.1",
     "gulp": "^3.8.11",
     "gulp-shell": "^0.4.0",
     "gulp-task-listing": "^1.0.0"
