@@ -1,6 +1,6 @@
 (function () {
 
-  VisApp.factory('Walls', Walls);
+  AnvilApp.factory('Walls', Walls);
 
   Walls.$inject = ['$q', 'User'];
 
@@ -36,9 +36,9 @@
     factory.template = function () {
       return {
         name: 'Wall ' + chance.word({syllablees: Math.ceil(Math.random() * 3)}),
-        creator: User.current(),
+        creator: User.current().name,
         created: moment().toISOString(),
-        modifier: User.current(),
+        modifier: User.current().name,
         modified: moment().toISOString(),
         boards: []
       }
@@ -47,9 +47,9 @@
     factory.templateBoard = function () {
       return {
         name: 'Board ' + chance.word({syllablees: Math.ceil(Math.random() * 3)}),
-        creator: User.current(),
+        creator: User.current().name,
         created: moment().toISOString(),
-        modifier: User.current(),
+        modifier: User.current().name,
         modified: moment().toISOString(),
         period: '5 minutes',
         window: '3 hours',
@@ -129,7 +129,7 @@
       if (!wall.created) {
         wall.created = moment().toISOString();
       }
-      wall.modifier = User.current();
+      wall.modifier = User.current().name;
       wall.modified = moment().toISOString();
 
       var deferred = $q.defer();

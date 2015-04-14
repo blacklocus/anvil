@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="VisApp">
+<html ng-app="AnvilApp" ng-controller="RootCtrl as rootCtrl">
 <head>
   <link rel="stylesheet" href="lib/bower_components/bootstrap/dist/css/bootstrap.min.css"/>
   <link rel="stylesheet" href="lib/bower_components/fontawesome/css/font-awesome.min.css"/>
@@ -22,6 +22,7 @@
   <script type="text/javascript" src="metrics.factory.js"></script>
   <script type="text/javascript" src="charting.factory.js"></script>
   <script type="text/javascript" src="walls.factory.js"></script>
+  <script type="text/javascript" src="root.controller.js"></script>
   <script type="text/javascript" src="walls.controller.js"></script>
   <script type="text/javascript" src="wall.controller.js"></script>
   <script type="text/javascript" src="board.controller.js"></script>
@@ -30,6 +31,8 @@
 
 
 <body class="container-fluid">
+
+
 
 <div ui-view></div>
 

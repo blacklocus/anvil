@@ -1,5 +1,5 @@
 (function () {
-  VisApp.factory('Metrics', Metrics);
+  AnvilApp.factory('Metrics', Metrics);
 
   Metrics.$inject = ['$q'];
 

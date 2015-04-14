@@ -1,6 +1,6 @@
 (function () {
 
-  VisApp.controller('BoardEditCtrl', BoardEditCtrl);
+  AnvilApp.controller('BoardEditCtrl', BoardEditCtrl);
 
   BoardEditCtrl.$inject = ['$scope', 'Metrics'];
 

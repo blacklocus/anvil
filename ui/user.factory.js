@@ -1,14 +1,18 @@
 (function () {
 
-  VisApp.factory('User', User);
+  AnvilApp.factory('User', User);
 
   User.$inject = [];
 
   function User() {
     var User = this;
 
+    var current = {
+      name: 'root'
+    };
+
     User.current = function () {
-      return 'root';
+      return current;
     };
 
     return User;

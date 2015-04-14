@@ -1,5 +1,5 @@
 (function () {
-  VisApp.factory('Charting', Charting);
+  AnvilApp.factory('Charting', Charting);
 
   function Charting() {
     var factory = this;

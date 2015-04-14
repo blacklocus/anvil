@@ -1,6 +1,6 @@
 (function () {
 
-  VisApp.controller('WallCtrl', WallCtrl);
+  AnvilApp.controller('WallCtrl', WallCtrl);
 
   WallCtrl.$inject = ['$scope', '$q', '$state', 'Walls'];
 

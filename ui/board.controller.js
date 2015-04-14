@@ -1,6 +1,6 @@
 (function () {
 
-  VisApp.controller('BoardCtrl', BoardCtrl);
+  AnvilApp.controller('BoardCtrl', BoardCtrl);
 
   BoardCtrl.$inject = ['$scope', '$q', '$element', 'Metrics', 'Charting', 'Walls'];
 
