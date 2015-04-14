@@ -3,18 +3,30 @@
       <span class="pull-right">
         <button type="button" class="btn btn-primary"
                 ng-hide="boardCtrl.editedBoard"
-                ng-click="boardCtrl.startEdit()">Edit Board
+                ng-click="boardCtrl.startEditSeries()">Edit Board
         </button>
         <button type="button" class="btn btn-success"
                 ng-show="boardCtrl.editedBoard"
-                ng-click="boardCtrl.finishEdit()">Done Editing
+                ng-click="boardCtrl.finishEditSeries()">Done Editing
         </button>
         <button type="button" class="btn btn-danger btn-sm" ng-click="wallCtrl.deleteBoard(board)">
           <i class="fa fa-trash"></i>
         </button>
       </span>
 
-    <h3>{{ board.name }}</h3>
+    <h3 ng-hide="boardCtrl.editingName">
+      <span data-toggle="tooltip" data-placement="right" title="Click to edit the Board's name"
+            ng-click="boardCtrl.startEditName()">
+        {{ board.name }}
+      </span>
+    </h3>
+
+    <form class="form-inline" ng-show="boardCtrl.editingName" ng-submit="boardCtrl.finishEditName()">
+      <h3>
+        <input type="text" class="form-control"
+               ng-model="board.name" ng-blur="boardCtrl.finishEditName()"/>
+      </h3>
+    </form>
   </div>
 
   <div ng-show="boardCtrl.editedBoard" ng-include="'boardedit.html'"></div>

@@ -1,5 +1,6 @@
-ui/lib/bower_components/
-.idea/
+/ui/lib/bower_components/
+/node_modules/
+/.idea/
 /*.iml
 /*.iws
 /*.ipr

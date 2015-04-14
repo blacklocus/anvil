@@ -9,8 +9,9 @@
     <div class="panel panel-primary" style="margin-bottom: 0;">
       <div class="panel-heading">
         <div class="panel-title">
-          <h2 ng-hide="wallCtrl.editingName" ng-click="wallCtrl.startRenameWall()">
-            <span data-toggle="tooltip" data-placement="right" title="Click to edit the Wall's name">
+          <h2 ng-hide="wallCtrl.editingName">
+            <span data-toggle="tooltip" data-placement="right" title="Click to edit the Wall's name"
+                  ng-click="wallCtrl.startRenameWall()">
               {{ wallCtrl.viewedWall.name }}
             </span>
           </h2>
@@ -18,9 +19,8 @@
           <form class="form-inline" ng-show="wallCtrl.editingName"
                 ng-submit="wallCtrl.finishRenameWall()">
             <h2>
-              <input id="edit-wall-name" type="text" class="form-control" tabindex="-1"
-                     ng-model="wallCtrl.viewedWall.name"
-                     ng-blur="wallCtrl.finishRenameWall()"/>
+              <input id="edit-wall-name" type="text" class="form-control"
+                     ng-model="wallCtrl.viewedWall.name" ng-blur="wallCtrl.finishRenameWall()"/>
             </h2>
           </form>
         </div>

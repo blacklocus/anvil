@@ -1,19 +1,19 @@
-* {
+.anvil * {
     /* keep it sharp */
     border-radius : 0 !important;
 }
-code {
+.anvil code {
     /* don't chop <code> sequences into pieces */
     white-space : nowrap;
 }
-label {
+.anvil label {
     /* don't really like bootstrap bold labels */
     font-weight: normal;
 }
-.auth-not-selected {
+.anvil .auth-not-selected {
     opacity : 0.5;
 }
-.top-right {
+.anvil .top-right {
     position: fixed;
     margin-top: 0;
     margin-right: 0;
@@ -21,10 +21,10 @@ label {
     right: 0;
     z-index: 1;
 }
-.overlayable {
+.anvil .overlayable {
     position : relative;
 }
-.overlay {
+.anvil .overlay {
     position         : absolute;
     text-align       : center;
     background-color : rgba(95, 94, 165, 0.20);
@@ -35,24 +35,30 @@ label {
     color            : rgba(95, 94, 165, 0.80);
     font-size        : 10em;
 }
-.board-top {
+.anvil .board-top {
     border-top : 4px lightgray double;
 }
-.board-editor {
+.anvil .board-editor {
     /* flush with button */
     margin-top : -3px;
     border     : 1px solid #5cb85c;
     /*background-color : #f2fff0;*/
 }
-.board-editor td .fa:hover {
+.anvil .board-editor td .fa:hover {
     text-decoration : none;
     cursor          : pointer;
 }
-.search-results {
+.anvil .search-results {
     max-height : 400px;
     overflow-y : scroll;
     font-size  : 0.9em;
 }
-.search-results th {
+.anvil .search-results th {
     background : lightgray;
+}
+.anvil .fa-plus-square-o {
+    color: green;
+}
+.anvil .fa-minus-square-o {
+    color: red;
 }

@@ -17,7 +17,10 @@
       '2 days', '1 day', '18 hours', '12 hours', '6 hours', '3 hours', '2 hours', '1 hour']);
     vm.periodOpts = Util.toDurations(['1 day', '6 hours', '1 hour', '15 minutes', '5 minutes', '1 minute']);
 
+    vm.editingName = false;
+
     vm.busy = false;
+
 
     vm.selectedWindow = function () {
       return vm.windowOpts[vm.selectedWindowIdx];
@@ -77,12 +80,21 @@
       $scope.wallCtrl.requestSaveWall();
     };
 
-    vm.startEdit = function () {
+    vm.startEditSeries = function () {
       vm.editedBoard = board;
     };
-    vm.finishEdit = function () {
+    vm.finishEditSeries = function () {
       vm.editedBoard = null;
     };
+
+    vm.startEditName = function () {
+      vm.editingName = true;
+    };
+    vm.finishEditName = function () {
+      vm.editingName = false;
+      $scope.wallCtrl.requestSaveWall();
+    };
+
 
     initialize();
 
