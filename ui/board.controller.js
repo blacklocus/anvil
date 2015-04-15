@@ -1,5 +1,4 @@
 (function () {
-
   AnvilApp.controller('BoardCtrl', BoardCtrl);
 
   BoardCtrl.$inject = ['$scope', '$q', '$element', 'Metrics', 'Charting', 'Walls'];

@@ -4,9 +4,11 @@
   <div class="search-results">
     <table class="table table-condensed" style="margin-bottom: 0;">
       <tbody>
+
       <tr>
         <th colspan="5">current series</th>
       </tr>
+
       <tr ng-repeat="metric in boardEditCtrl.edited.metrics">
         <td>
           <a class="fa fa-minus-square-o" ng-click="boardEditCtrl.removeSeries(metric)"></a>
@@ -14,13 +16,24 @@
                   ng-options="aggregationOpt for aggregationOpt in boardEditCtrl.aggregationOpts"
                   ng-change="wallCtrl.requestSaveWall(); boardCtrl.requestRefresh()"></select>
         </td>
-        <td>{{ metric.namespace }}</td>
-        <td>{{ metric.name }}</td>
-        <td>{{ boardEditCtrl.formatDimensions(metric.dimensions) }}</td>
+        <td>
+          <a ng-click="boardEditCtrl.searchNamespace(metric.namespace)">{{ metric.namespace }}</a>
+        </td>
+        <td>
+          <a ng-click="boardEditCtrl.searchName(metric.name)">{{ metric.name }}</a>
+        </td>
+        <td>
+          <span ng-repeat="(dimName,dimVal) in metric.dimensions">
+            <a ng-click="boardEditCtrl.searchDimension(dimName)">{{ dimName }}</a>=<a
+              ng-click="boardEditCtrl.searchDimension(dimName, dimVal)">{{ dimVal }}</a>{{ $last ? '' : ', ' }}
+          </span>
+        </td>
       </tr>
+
       <tr>
         <th colspan="5">search and add more series</th>
       </tr>
+
       <tr>
         <td>
           <i class="fa fa-unsorted"></i>
@@ -41,6 +54,7 @@
                  ng-change="boardEditCtrl.requestSearch()"/>
         </td>
       </tr>
+
       <tr ng-show="!boardEditCtrl.results.length && !boardEditCtrl.searching">
         <td></td>
         <td colspan="4">No search results</td>
@@ -49,11 +63,21 @@
         <td></td>
         <td colspan="4">Searching... <i class="fa fa-spinner fa-spin"></i></td>
       </tr>
+
       <tr ng-repeat="result in boardEditCtrl.results">
         <td><a class="fa fa-plus-square-o" ng-click="boardEditCtrl.addSeries(result)"></a></td>
-        <td>{{ result.Namespace }}</td>
-        <td>{{ result.MetricName }}</td>
-        <td>{{ boardEditCtrl.formatCwDimensions(result.Dimensions) }}</td>
+        <td>
+          <a ng-click="boardEditCtrl.searchNamespace(result.Namespace)">{{ result.Namespace }}</a>
+        </td>
+        <td>
+          <a ng-click="boardEditCtrl.searchName(result.MetricName)">{{ result.MetricName }}</a>
+        </td>
+        <td>
+          <span ng-repeat="dim in result.Dimensions">
+            <a ng-click="boardEditCtrl.searchDimension(dim.Name)">{{ dim.Name }}</a>=<a
+              ng-click="boardEditCtrl.searchDimension(dim.Name, dim.Value)">{{ dim.Value }}</a>{{ $last ? '' : ', ' }}
+          </span>
+        </td>
       </tr>
       </tbody>
     </table>

@@ -24,14 +24,6 @@
     vm.searchesRemaining = 0;
     vm.results = [];
 
-    vm.formatDimensions = function (dimensions) {
-      return _.pairs(dimensions)
-          .map(function (p) {
-            return p[0] + '=' + p[1];
-          })
-          .join(', ');
-    };
-
     vm.formatCwDimensions = function (dimensions) {
       return dimensions
           .map(function (e) {
@@ -123,6 +115,33 @@
       vm.edited.metrics.push(series);
       $scope.boardCtrl.requestRefresh();
       $scope.wallCtrl.requestSaveWall();
+    };
+
+    vm.searchNamespace = function (namespace) {
+      vm.search.namespace = namespace;
+      vm.requestSearch();
+    };
+
+    vm.searchName = function (name) {
+      vm.search.name = name;
+      vm.requestSearch();
+    };
+
+    /**
+     * @param {String} dimName
+     * @param {String} [dimValue]
+     */
+    vm.searchDimension = function (dimName, dimValue) {
+      var token = dimName;
+      if (dimValue) {
+        token += '=' + dimValue;
+      }
+      var cleanedSearchDims = vm.search.dimensions.trim();
+      if (cleanedSearchDims && !vm.search.dimensions.trim().endsWith(',')) {
+        vm.search.dimensions += ',';
+      }
+      vm.search.dimensions += token;
+      vm.requestSearch();
     };
 
 

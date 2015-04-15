@@ -26,3 +26,4 @@ AnvilApp.run(['$rootScope', '$state', 'User', function ($rootScope, $state, User
     });
   });
 }]);
+

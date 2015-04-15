@@ -53,6 +53,9 @@
     overflow-y : scroll;
     font-size  : 0.9em;
 }
+.anvil .search-results a:hover {
+    cursor: pointer;
+}
 .anvil .search-results th {
     background : lightgray;
 }
