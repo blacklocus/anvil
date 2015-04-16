@@ -6,7 +6,7 @@ AnvilApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvide
 
   $stateProvider
       .state('config', {
-        url: '/config',
+        url: '/config/:shared?',
         templateUrl: 'config.html'
       })
       .state('walls', {
@@ -21,9 +21,17 @@ AnvilApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvide
 
 AnvilApp.run(['$rootScope', '$state', 'User', function ($rootScope, $state, User) {
   $rootScope.$on('$locationChangeSuccess', function () {
-    User.testCredentials().then(function () {}, function () {
-      $state.go('config');
-    });
+    // Configuration screen does not require authentication, so don't bother checking.
+    // In fact, if the user has been given a shared configuration link, it will be
+    // lost if we override navigation to go to 'config' without those params.
+    // There are two clauses in this conditional because this is triggered on initial
+    // load "" and on navigation "{state name}".
+    if ($state.current.name && $state.current.name !== 'config') {
+      User.testCredentials().then(function () {}, function () {
+        alert('Configuration test failed. You need to configure your client first!')
+        $state.go('config');
+      });
+    }
   });
 }]);
 

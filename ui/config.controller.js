@@ -5,14 +5,15 @@
 
   AnvilApp.controller('ConfigCtrl', ConfigCtrl);
 
-  ConfigCtrl.$inject = ['$scope', 'User', 'AwsBanana'];
+  ConfigCtrl.$inject = ['$state', 'User', 'AwsBanana'];
 
-  function ConfigCtrl($scope, User, AwsBanana) {
+  function ConfigCtrl($state, User, AwsBanana) {
     var vm = this;
 
     vm.checking = false;
 
     vm.region = AwsBanana.getRegion();
+    vm.authType = User.current().authType;
     vm.rootAuth = {
       keyId: '',
       secretKey: ''
@@ -22,24 +23,24 @@
       password: ''
     };
 
-    $scope.authType = User.current().authType;
-
-    vm.isSelected = function (authType) {
-      return $scope.authType === authType;
-    };
-
-    vm.propagateRegionChange = function () {
-      AwsBanana.setRegion(vm.region);
+    vm.linkConfiguration = function () {
+      var shared = btoa(JSON.stringify({
+        region: vm.region,
+        authType: vm.authType,
+        rootAuth: vm.rootAuth
+      }));
+      var loc = window.location;
+      return loc.protocol + '//' + loc.host + loc.pathname + $state.href('config', {shared: shared});
     };
 
     vm.checkAndSave = function () {
       vm.checking = true;
 
-      AwsBanana.setRegion($scope.region);
+      AwsBanana.setRegion(vm.region);
 
-      if ($scope.authType === 'root') {
+      if (vm.authType === 'root') {
         User.setRootCredentials(vm.rootAuth.keyId, vm.rootAuth.secretKey);
-      } else if ($scope.authType === 'cognito') {
+      } else if (vm.authType === 'cognito') {
         alert('not implemented');
       }
 
@@ -56,22 +57,33 @@
 
 
     function initialize() {
-      var user = User.current();
+      // If the user followed a shared link, load that configuration.
+      var shared = $state.params.shared;
+      if (shared) {
+        _.pairs(JSON.parse(atob(shared))).forEach(function (p) {
+          vm[p[0]] = p[1];
+        });
 
-      if (user.authType === 'unauthenticated') {
-        // do nothing
-      } else if (user.authType === 'root') {
-        vm.rootAuth.keyId = user.keyId;
-        vm.rootAuth.secretKey = user.secretKey;
-        $scope.authType = user.authType;
-      } else if (user.authType === 'cognito') {
-        vm.cognitoAuth.username = user.name;
-        $scope.authType = user.authType;
       } else {
-        alert('unknown user.authType: ' + user.authType);
+
+        var user = User.current();
+
+        if (user.authType === 'unauthenticated') {
+          // do nothing
+        } else if (user.authType === 'root') {
+          vm.rootAuth.keyId = user.keyId;
+          vm.rootAuth.secretKey = user.secretKey;
+          vm.authType = user.authType;
+        } else if (user.authType === 'cognito') {
+          vm.cognitoAuth.username = user.name;
+          vm.authType = user.authType;
+        } else {
+          alert('unknown user.authType: ' + user.authType);
+        }
       }
 
     }
   }
 
-})();
+})
+();

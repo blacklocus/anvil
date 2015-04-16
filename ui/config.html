@@ -3,6 +3,15 @@
   <fieldset ng-disabled="configCtrl.checking">
 
     <div class="col-xs-12">
+      <div class="alert alert-warning" style="margin-top: 20px; margin-bottom: 0;">
+        <i class="fa fa-caret-down"></i>
+        Be sure to click <b>Check and Save</b> if you made any changes or followed a shared configuration link.
+        Otherwise the configuration will not be applied!
+        <i class="fa fa-caret-down"></i>
+      </div>
+    </div>
+
+    <div class="col-xs-12">
       <h3>Configuration</h3>
 
       <div class="form-horizontal">
@@ -10,8 +19,7 @@
           <label class="control-label col-xs-2">region</label>
 
           <div class="col-xs-10">
-            <input type="text" class="form-control" ng-model="configCtrl.region"
-                   ng-change="configCtrl.propagateRegionChange()"/>
+            <input type="text" class="form-control" ng-model="configCtrl.region"/>
           </div>
         </div>
       </div>
@@ -19,10 +27,10 @@
 
     <h3 class="col-xs-12">Authentication</h3>
 
-    <div class="col-sm-6" ng-class="{ 'auth-not-selected': !configCtrl.isSelected('root') }">
+    <div class="col-sm-6" ng-class="{ 'auth-not-selected': configCtrl.authType != 'root' }">
       <h4>
         <!-- wrap in label for click-on-text selection -->
-        <label><input type="radio" ng-model="authType" value="root"/> using AWS root credentials</label>
+        <label><input type="radio" ng-model="configCtrl.authType" value="root"/> using AWS root credentials</label>
       </h4>
 
       <div class="form-horizontal">
@@ -30,7 +38,8 @@
           <label class="control-label col-xs-3">key ID</label>
 
           <div class="col-xs-9">
-            <input type="text" class="form-control" ng-model="configCtrl.rootAuth.keyId" ng-focus="authType = 'root'"/>
+            <input type="text" class="form-control" ng-model="configCtrl.rootAuth.keyId"
+                   ng-focus="configCtrl.authType = 'root'"/>
           </div>
         </div>
         <div class="form-group">
@@ -38,26 +47,33 @@
 
           <div class="col-xs-9">
             <input type="text" class="form-control" ng-model="configCtrl.rootAuth.secretKey"
-                   ng-focus="authType = 'root'"/>
+                   ng-focus="configCtrl.authType = 'root'"/>
           </div>
         </div>
       </div>
 
     </div>
-    <div class="col-sm-6" ng-class="{ 'auth-not-selected': !configCtrl.isSelected('cognito') }">
+    <div class="col-sm-6" ng-class="{ 'auth-not-selected': configCtrl.authType != 'cognito' }">
       <h4>
         <!-- wrap in label for click-on-text selection -->
-        <label><input type="radio" ng-model="authType" value="cognito"/> using cognito credentials (AWS login)</label>
+        <label><input type="radio" ng-model="configCtrl.authType" value="cognito"/> using cognito credentials (AWS
+          login)</label>
       </h4>
 
-      Not Yet Implemented
+      Not Yet Implemented (because AWS has not yet implemented any such API)
 
     </div>
 
     <div class="col-xs-12">
-      <button type="submit" class="btn btn-lg btn-primary col-xs-12">
-        Check and Save Configuration <i ng-show="configCtrl.checking" class="fa fa-spinner fa-spin"></i>
-      </button>
+      <div>
+        <button type="submit" class="btn btn-lg btn-primary col-xs-12">
+          Check and Save Configuration <i ng-show="configCtrl.checking" class="fa fa-spinner fa-spin"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-xs-12" style="white-space: nowrap; overflow-x: hidden; text-overflow: ellipsis; margin-top: 20px;">
+      Share this configuration: <a href="{{ configCtrl.linkConfiguration() }}">{{ configCtrl.linkConfiguration()
+      }}</a>
     </div>
 
   </fieldset>
