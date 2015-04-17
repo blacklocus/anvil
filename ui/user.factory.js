@@ -41,11 +41,15 @@
       var deferred = $q.defer();
 
       // TODO This doesn't validate the region
-      AwsBanana.s3.listObjects({
-        Bucket: AwsBanana.getS3Bucket(),
-        Prefix: AwsBanana.getS3Prefix(),
-        MaxKeys: 0
-      }, Util.awsResponseToDeferred(deferred));
+      try {
+        AwsBanana.s3.listObjects({
+          Bucket: AwsBanana.getS3Bucket(),
+          Prefix: AwsBanana.getS3Prefix(),
+          MaxKeys: 0
+        }, Util.awsResponseToDeferred(deferred));
+      } catch (e) {
+        deferred.reject(e);
+      }
 
       return deferred.promise;
     };

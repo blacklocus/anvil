@@ -11,27 +11,28 @@ AnvilApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvide
       })
       .state('walls', {
         url: '/walls',
-        templateUrl: 'walls.html'
+        templateUrl: 'walls.html',
+        resolve: {
+          configured: validConfiguration
+        }
       })
       .state('wall', {
         url: '/wall/:name',
-        templateUrl: 'wall.html'
+        templateUrl: 'wall.html',
+        resolve: {
+          configured: validConfiguration
+        }
       });
-}]);
 
-AnvilApp.run(['$rootScope', '$state', 'User', function ($rootScope, $state, User) {
-  $rootScope.$on('$locationChangeSuccess', function () {
-    // Configuration screen does not require authentication, so don't bother checking.
-    // In fact, if the user has been given a shared configuration link, it will be
-    // lost if we override navigation to go to 'config' without those params.
-    // There are two clauses in this conditional because this is triggered on initial
-    // load "" and on navigation "{state name}".
-    if ($state.current.name && $state.current.name !== 'config') {
-      User.testCredentials().then(function () {}, function () {
-        alert('Configuration test failed. You need to configure your client first!');
-        $state.go('config');
-      });
-    }
-  });
+  validConfiguration.$inject = ['$state', 'User'];
+  function validConfiguration($state, User) {
+    return User.testCredentials()
+        .then(function () {}, function () {
+          alert('Failed to read Anvil data for your organization. Please check your configuration.\n\n' +
+          'Did you receive a "shared configuration link" provided by your organization? ' +
+          'Did you click "Check and Save" on the configuration page?');
+          $state.go('config');
+        });
+  }
 }]);
 
