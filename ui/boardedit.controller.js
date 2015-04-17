@@ -157,23 +157,38 @@
       vm.edited = $scope.boardCtrl.editedBoard;
     });
 
-    // This madness prevents unused scroll from bubbling to parent containers.
-    // Adapted from https://gist.github.com/theftprevention/5959411
-    $('.board-editor').on("DOMMouseScroll mousewheel", '.editor-table', function (h) {
-      var g = $(this), f = this.scrollTop, d = this.scrollHeight, b = g.height(), i = h.originalEvent.wheelDelta, a = i > 0, c = function () {
-        h.stopPropagation();
-        h.preventDefault();
-        h.returnValue = false;
-        return false
-      };
-      if (!a && -i > d - b - f) {
-        g.scrollTop(d);
-        return c()
+    // This madness makes inner scrolling actually usable. Inner scrollables do not bubble extra scroll to parents.
+    // Inner scrollables that are too small to need a scrollbar scroll the parent normally, as if they were not
+    // inner scrollables at all. Based on https://gist.github.com/theftprevention/5959411
+    $('.board-editor').on("DOMMouseScroll mousewheel", '.editor-table', function (event) {
+      var element = $(this),
+          scrollTop = this.scrollTop,
+          scrollHeight = this.scrollHeight,
+          elementHeight = element.height(),
+          wheelDelta = event.originalEvent.wheelDelta,
+          positiveScroll = wheelDelta > 0,
+          preventBubble = function () {
+            event.stopPropagation();
+            event.preventDefault();
+            event.returnValue = false;
+            return false
+          };
+
+      if (scrollHeight === elementHeight) {
+        // The element is not large enough to warrant scroll. Let scroll proceed as normal.
+
+      } else if (positiveScroll && wheelDelta > scrollTop) {
+        // There is not room to scroll up. Modify scroll event.
+        element.scrollTop(0);
+        return preventBubble()
+
+      } else if (!positiveScroll && -wheelDelta > scrollHeight - elementHeight - scrollTop) {
+        // There is not room to scroll down. Modify scroll event.
+        element.scrollTop(scrollHeight);
+        return preventBubble()
+
       } else {
-        if (a && i > f) {
-          g.scrollTop(0);
-          return c()
-        }
+        // Else there is room to scroll up or down. Let scroll proceed as normal.
       }
     });
   }
