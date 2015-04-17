@@ -155,7 +155,27 @@
       }
 
       vm.edited = $scope.boardCtrl.editedBoard;
-    })
+    });
+
+    // This madness prevents unused scroll from bubbling to parent containers.
+    // Adapted from https://gist.github.com/theftprevention/5959411
+    $('.board-editor').on("DOMMouseScroll mousewheel", '.editor-table', function (h) {
+      var g = $(this), f = this.scrollTop, d = this.scrollHeight, b = g.height(), i = h.originalEvent.wheelDelta, a = i > 0, c = function () {
+        h.stopPropagation();
+        h.preventDefault();
+        h.returnValue = false;
+        return false
+      };
+      if (!a && -i > d - b - f) {
+        g.scrollTop(d);
+        return c()
+      } else {
+        if (a && i > f) {
+          g.scrollTop(0);
+          return c()
+        }
+      }
+    });
   }
 
 }());

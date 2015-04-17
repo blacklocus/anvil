@@ -48,15 +48,15 @@
     text-decoration : none;
     cursor          : pointer;
 }
-.anvil .search-results {
+.anvil .board-editor .editor-table {
     max-height : 400px;
     overflow-y : scroll;
     font-size  : 0.9em;
 }
-.anvil .search-results a:hover {
+.anvil .board-editor .editor-table a:hover {
     cursor: pointer;
 }
-.anvil .search-results th {
+.anvil .board-editor .editor-table th {
     background : lightgray;
 }
 .anvil .fa-plus-square-o {
@@ -64,4 +64,8 @@
 }
 .anvil .fa-minus-square-o {
     color: red;
+}
+.anvil .extra-space {
+    /* Extra space so user does not have to work at the bottom of the screen. */
+    height: 60vh;
 }
