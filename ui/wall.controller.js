@@ -64,7 +64,10 @@
 
 
     // Initialize tooltips
-    $('body').tooltip({selector: '[data-toggle=tooltip]'});
+    $('body').tooltip({
+      animation: false,
+      selector: '[data-toggle=tooltip]'
+    });
 
     // Get the wall definition and build the boards.
     Util.thenPromiseSuccessOrAlert(Walls.get(wallName), function (wall) {

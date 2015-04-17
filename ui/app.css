@@ -59,6 +59,18 @@
 .anvil .board-editor .editor-table th {
     background : lightgray;
 }
+.anvil .board-editor .editor-table .btn.btn-sm {
+    /* For "custom" series name button, or any other editor table inline button */
+    /* Squeeze inline table buttons as to add extra cell height */
+    margin-top: -3px;
+    margin-bottom: -3px;
+    padding-top : 3px;
+    padding-bottom : 3px;
+}
+.anvil .board-editor .editor-table input:last-child {
+    margin-top : 4px; /* flush to "custom" series name button */
+    margin-bottom: -3px; /* same, lesser cell whitespace as "custom" series name button */
+}
 .anvil .fa-plus-square-o {
     color: green;
 }

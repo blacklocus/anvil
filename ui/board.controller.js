@@ -161,12 +161,12 @@
       var requestId = ++refresh.counter;
 
       $q.all(board.metrics
-          .map(function (metricDescriptor) {
-            return Metrics.dataOf(metricDescriptor, vm.selectedWindow(), vm.selectedPeriod());
+          .map(function (seriesDescriptor) {
+            return Metrics.dataOf(seriesDescriptor, vm.selectedWindow(), vm.selectedPeriod());
           }))
-          .then(function (metrics) {
+          .then(function (metricsData) {
             if (refresh.counter == requestId) {
-              var flotData = Charting.toFlotData(board.metrics, metrics);
+              var flotData = Charting.toFlotData(board.metrics, metricsData);
 
               vm.flot.setData(flotData);
               vm.flot.setupGrid();

@@ -26,7 +26,7 @@
 
     vm.startNewWall = function () {
       vm.editingNewWall = true;
-      vm.newWall = Walls.template();
+      vm.newWall = Walls.templateWall();
     };
 
     vm.saveNewWall = function () {

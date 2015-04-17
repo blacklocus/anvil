@@ -9,21 +9,40 @@
         <th colspan="5">current series</th>
       </tr>
 
-      <tr ng-repeat="metric in boardEditCtrl.edited.metrics">
+      <tr ng-repeat="series in boardEditCtrl.edited.metrics">
         <td>
-          <a class="fa fa-minus-square-o" ng-click="boardEditCtrl.removeSeries(metric)"></a>
-          <select ng-model="metric.aggregation"
+          <a class="fa fa-minus-square-o" ng-click="boardEditCtrl.removeSeries(series)"></a>
+          <select ng-model="series.aggregation"
                   ng-options="aggregationOpt for aggregationOpt in boardEditCtrl.aggregationOpts"
                   ng-change="wallCtrl.requestSaveWall(); boardCtrl.requestRefresh()"></select>
         </td>
         <td>
-          <a ng-click="boardEditCtrl.searchNamespace(metric.namespace)">{{ metric.namespace }}</a>
+          <a ng-click="boardEditCtrl.searchNamespace(series.namespace)">{{ series.namespace }}</a>
         </td>
         <td>
-          <a ng-click="boardEditCtrl.searchName(metric.name)">{{ metric.name }}</a>
+          <div>
+            <a ng-click="boardEditCtrl.searchName(series.name)">{{ series.name }}</a>
+            <a data-toggle="tooltip" data-placement="right"
+               class="pull-right btn btn-sm btn-default"
+               title="Set a custom name for this series"
+               ng-hide="series.customName || boardEditCtrl.editingCustomNameForSeries === series"
+               ng-click="boardEditCtrl.startEditingSeriesCustomName($event, series)">
+              <i class="fa fa-plus"></i> custom</a>
+            <a data-toggle="tooltip" data-placement="right"
+               class="pull-right btn btn-sm btn-default"
+               title="Remove custom name for this series"
+               ng-show="series.customName || boardEditCtrl.editingCustomNameForSeries === series"
+               ng-click="boardEditCtrl.removeSeriesCustomName(series)">
+              <i class="fa fa-minus"></i> custom</a>
+          </div>
+          <form ng-show="series.customName || boardEditCtrl.editingCustomNameForSeries === series"
+                ng-submit="boardEditCtrl.finishEditingSeriesCustomName($event)">
+            <input type="text" ng-model="series.customName" class="form-control input-sm"
+                   ng-blur="boardEditCtrl.finishEditingSeriesCustomName()"/>
+          </form>
         </td>
         <td>
-          <span ng-repeat="(dimName,dimVal) in metric.dimensions">
+          <span ng-repeat="(dimName,dimVal) in series.dimensions">
             <a ng-click="boardEditCtrl.searchDimension(dimName)">{{ dimName }}</a>=<a
               ng-click="boardEditCtrl.searchDimension(dimName, dimVal)">{{ dimVal }}</a>{{ $last ? '' : ', ' }}
           </span>

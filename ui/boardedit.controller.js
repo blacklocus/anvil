@@ -2,15 +2,16 @@
 
   AnvilApp.controller('BoardEditCtrl', BoardEditCtrl);
 
-  BoardEditCtrl.$inject = ['$scope', 'Metrics'];
+  BoardEditCtrl.$inject = ['$scope', '$timeout', 'Metrics'];
 
-  function BoardEditCtrl($scope, Metrics) {
+  function BoardEditCtrl($scope, $timeout, Metrics) {
     var vm = this,
         Util = Anvil.Util;
 
     vm.aggregationOpts = ['SampleCount', 'Average', 'Sum', 'Minimum', 'Maximum'];
 
     vm.edited = null;
+    vm.editingCustomNameForSeries = null;
     vm.search = {
       namespace: '',
       name: '',
@@ -24,12 +25,29 @@
     vm.searchesRemaining = 0;
     vm.results = [];
 
-    vm.formatCwDimensions = function (dimensions) {
-      return dimensions
-          .map(function (e) {
-            return e.Name + '=' + e.Value;
-          })
-          .join(', ');
+    vm.startEditingSeriesCustomName = function ($event, series) {
+      vm.editingCustomNameForSeries = series;
+      // Timeout because we can't focus on a hidden element, and the element will not become visible until the end of
+      // the next digest cycle. There are many terrible ways to deal with this (using private angular methods, dirty
+      // watch expressions, ...); this is one of the least terrible ways.
+      $timeout(function () {
+        $($event.currentTarget)
+            .closest('td')
+            .find('[ng-model="series.customName"]')
+            .focus()
+            .select();
+      }, 0, false);
+    };
+    vm.finishEditingSeriesCustomName = function () {
+      vm.editingCustomNameForSeries = null;
+      $scope.boardCtrl.requestRefresh();
+      $scope.wallCtrl.requestSaveWall();
+    };
+    vm.removeSeriesCustomName = function (series) {
+      vm.editingCustomNameForSeries = null;
+      series.customName = '';
+      $scope.boardCtrl.requestRefresh();
+      $scope.wallCtrl.requestSaveWall();
     };
 
 

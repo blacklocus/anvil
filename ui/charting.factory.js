@@ -4,15 +4,17 @@
   function Charting() {
     var factory = this;
 
-    factory.toFlotData = function (metricDescriptors, cloudWatchMetrics) {
+    factory.toFlotData = function (seriesDescriptors, cloudWatchMetrics) {
 
       var data = [];
       for (var i = 0; i < cloudWatchMetrics.length; i++) {
-        var metricDescriptor = metricDescriptors[i];
-        var metric = cloudWatchMetrics[i];
-        var series = makeSeries(metricDescriptor, metric);
+        var seriesDescriptor = seriesDescriptors[i];
+        var metricData = cloudWatchMetrics[i];
+        var series = makeSeries(seriesDescriptor, metricData);
+        // Prefer custom name if one is available.
+        var seriesName = seriesDescriptor.customName || seriesDescriptor.name;
         data.push({
-          label: metricDescriptor.aggregation + ' ' + metricDescriptor.name,
+          label: seriesDescriptor.aggregation + ' ' + seriesName,
           data: series
         });
       }

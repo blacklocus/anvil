@@ -33,7 +33,7 @@
       });
     };
 
-    Walls.template = function () {
+    Walls.templateWall = function () {
       return {
         name: 'Wall ' + chance.word({syllablees: Math.ceil(Math.random() * 3)}),
         creator: User.current().name,
