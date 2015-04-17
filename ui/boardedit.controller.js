@@ -38,6 +38,13 @@
             .select();
       }, 0, false);
     };
+    vm.blurEditingSeriesCustomName = function ($event) {
+      // If the user submits the form (hits enter) rather than blurring (tabs or clicks away),
+      // this will blur the input which will then fire finishEditingSeriesCustomName.
+      // The blur is important to convince the user that their change was submitted - the blinking
+      // cursor goes away upon submission.
+      $($event.target).find(':focus').blur();
+    };
     vm.finishEditingSeriesCustomName = function () {
       vm.editingCustomNameForSeries = null;
       $scope.boardCtrl.requestRefresh();

@@ -36,7 +36,7 @@
               <i class="fa fa-minus"></i> custom</a>
           </div>
           <form ng-show="series.customName || boardEditCtrl.editingCustomNameForSeries === series"
-                ng-submit="boardEditCtrl.finishEditingSeriesCustomName($event)">
+                ng-submit="boardEditCtrl.blurEditingSeriesCustomName($event)">
             <input type="text" ng-model="series.customName" class="form-control input-sm"
                    ng-blur="boardEditCtrl.finishEditingSeriesCustomName()"/>
           </form>
