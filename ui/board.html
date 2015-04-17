@@ -16,7 +16,7 @@
 
     <h3 ng-hide="boardCtrl.editingName">
       <span data-toggle="tooltip" data-placement="right" title="Click to edit the Board's name"
-            ng-click="boardCtrl.startEditName()">
+            ng-click="boardCtrl.startEditName($event)">
         {{ board.name }}
       </span>
     </h3>

@@ -28,7 +28,7 @@ AnvilApp.run(['$rootScope', '$state', 'User', function ($rootScope, $state, User
     // load "" and on navigation "{state name}".
     if ($state.current.name && $state.current.name !== 'config') {
       User.testCredentials().then(function () {}, function () {
-        alert('Configuration test failed. You need to configure your client first!')
+        alert('Configuration test failed. You need to configure your client first!');
         $state.go('config');
       });
     }

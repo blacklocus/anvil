@@ -1,11 +1,10 @@
 (function () {
   AnvilApp.controller('BoardCtrl', BoardCtrl);
 
-  BoardCtrl.$inject = ['$scope', '$q', '$element', 'Metrics', 'Charting', 'Walls'];
+  BoardCtrl.$inject = ['$scope', '$q', '$element', '$timeout', 'Metrics', 'Charting'];
 
-  function BoardCtrl($scope, $q, $element, Metrics, Charting, Walls) {
+  function BoardCtrl($scope, $q, $element, $timeout, Metrics, Charting) {
     var vm = this,
-        wall = $scope.wallCtrl.viewedWall,
         board = $scope.board,
         Util = Anvil.Util;
 
@@ -86,7 +85,20 @@
       vm.editedBoard = null;
     };
 
-    vm.startEditName = function () {
+    vm.startEditName = function ($event) {
+      // Timeout because we can't focus on a hidden element, and the element will not become visible until the end of
+      // the next digest cycle. There are many terrible ways to deal with this (using private angular methods, dirty
+      // watch expressions, ...); this is one of the least terrible ways.
+      $timeout(function () {
+        // Within the current BoardCtrl DOM subtree, find the board name input. This should resist
+        // breakage on changes made within the BoardCtrl.
+        $($event.currentTarget)
+            .closest('[ng-controller^=BoardCtrl]')
+            .find('[ng-model="board.name"]')
+            .focus()
+            .select();
+      }, 0, false);
+
       vm.editingName = true;
     };
     vm.finishEditName = function () {

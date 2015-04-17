@@ -2,9 +2,9 @@
 
   AnvilApp.controller('WallCtrl', WallCtrl);
 
-  WallCtrl.$inject = ['$scope', '$q', '$state', 'Walls'];
+  WallCtrl.$inject = ['$scope', '$q', '$state', '$timeout', 'Walls'];
 
-  function WallCtrl($scope, $q, $state, Walls) {
+  function WallCtrl($scope, $q, $state, $timeout, Walls) {
     var vm = this,
         wallName = $state.params.name,
         Util = Anvil.Util;
@@ -34,9 +34,12 @@
     var oldWallName = '';
     vm.startRenameWall = function () {
       oldWallName = vm.viewedWall.name;
-      setTimeout(function () {
+      // Timeout because we can't focus on a hidden element, and the element will not become visible until the end of
+      // the next digest cycle. There are many terrible ways to deal with this (using private angular methods, dirty
+      // watch expressions, ...); this is one of the least terrible ways.
+      $timeout(function () {
         angular.element('#edit-wall-name').focus().select();
-      }, 100);
+      }, 0, false);
       vm.editingName = true;
     };
     vm.finishRenameWall = function () {
