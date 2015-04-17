@@ -6,11 +6,10 @@
 
   function Walls($q, User, AwsBanana) {
     var Walls = this,
-        Const = Anvil.Const,
         Util = Anvil.Util;
 
     Walls.get = function (name) {
-      return read(Const.wallsPrefix + name);
+      return read(AwsBanana.getS3Prefix() + name);
     };
 
     // TODO handle multiple pages
@@ -18,8 +17,8 @@
       var deferred = $q.defer();
 
       AwsBanana.s3.listObjects({
-        Bucket: Const.wallsBucket,
-        Prefix: Const.wallsPrefix
+        Bucket: AwsBanana.getS3Bucket(),
+        Prefix: AwsBanana.getS3Prefix()
       }, Util.awsResponseToDeferred(deferred));
 
       return Util.thenPromiseSuccess(deferred.promise, function (data) {
@@ -78,8 +77,8 @@
       var deferred = $q.defer();
 
       AwsBanana.s3.deleteObject({
-        Bucket: Const.wallsBucket,
-        Key: Const.wallsPrefix + name
+        Bucket: AwsBanana.getS3Bucket(),
+        Key: AwsBanana.getS3Prefix() + name
       }, Util.awsResponseToDeferred(deferred));
 
       return deferred.promise;
@@ -92,7 +91,7 @@
       var deferred = $q.defer();
 
       AwsBanana.s3.getObject({
-        Bucket: Const.wallsBucket,
+        Bucket: AwsBanana.getS3Bucket(),
         Key: key
       }, Util.awsResponseToDeferred(deferred));
 
@@ -105,7 +104,7 @@
       var deferred = $q.defer();
 
       AwsBanana.s3.getObject({
-        Bucket: Const.wallsBucket,
+        Bucket: AwsBanana.getS3Bucket(),
         Key: key
       }, function (error) {
         if (error) {
@@ -140,7 +139,7 @@
         return deferred.promise;
       }
 
-      var key = Const.wallsPrefix + wall.name;
+      var key = AwsBanana.getS3Prefix() + wall.name;
       if (createOnly) {
         Util.thenPromiseSuccess(exists(key), function (exists) {
           if (exists) {
@@ -160,7 +159,7 @@
       function doActualSave() {
         var json = angular.toJson(wall, 2);
         AwsBanana.s3.putObject({
-          Bucket: Const.wallsBucket,
+          Bucket: AwsBanana.getS3Bucket(),
           Key: key,
           Body: json,
           ContentType: 'application/json'

@@ -6,7 +6,6 @@
 
   function User($q, localStorageService, AwsBanana) {
     var User = this,
-        Const = Anvil.Const,
         Util = Anvil.Util;
 
     User.current = function () {
@@ -43,8 +42,8 @@
 
       // TODO This doesn't validate the region
       AwsBanana.s3.listObjects({
-        Bucket: Const.wallsBucket,
-        Prefix: Const.wallsPrefix,
+        Bucket: AwsBanana.getS3Bucket(),
+        Prefix: AwsBanana.getS3Prefix(),
         MaxKeys: 0
       }, Util.awsResponseToDeferred(deferred));
 

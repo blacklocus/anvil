@@ -13,6 +13,9 @@
     vm.checking = false;
 
     vm.region = AwsBanana.getRegion();
+    vm.s3Bucket = AwsBanana.getS3Bucket();
+    vm.s3Prefix = AwsBanana.getS3Prefix();
+
     vm.authType = User.current().authType;
     vm.rootAuth = {
       keyId: '',
@@ -26,6 +29,8 @@
     vm.linkConfiguration = function () {
       var shared = btoa(JSON.stringify({
         region: vm.region,
+        s3Bucket: vm.s3Bucket,
+        s3Prefix: vm.s3Prefix,
         authType: vm.authType,
         rootAuth: vm.rootAuth
       }));
@@ -37,6 +42,8 @@
       vm.checking = true;
 
       AwsBanana.setRegion(vm.region);
+      AwsBanana.setS3Bucket(vm.s3Bucket);
+      AwsBanana.setS3Prefix(vm.s3Prefix);
 
       if (vm.authType === 'root') {
         User.setRootCredentials(vm.rootAuth.keyId, vm.rootAuth.secretKey);
@@ -85,5 +92,4 @@
     }
   }
 
-})
-();
+}());
