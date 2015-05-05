@@ -13,6 +13,8 @@ Use Anvil to create *walls* of *boards*. A wall is simply a collection of boards
 
 ## Deployment ##
 
+These instructions are for BlackLocus to update anvil.blacklocus.com.
+
 ```bash
 # For tooling
 npm install
