@@ -4,7 +4,15 @@
   function Charting() {
     var factory = this;
 
-    factory.toFlotData = function (seriesDescriptors, cloudWatchMetrics) {
+    /**
+     * @param {{}[]} seriesDescriptors that describe each series on the chart
+     * @param {[]} cloudWatchMetrics the actual data pulled for each of <code>seriesDescriptors</code> respective to
+     * their positions in the array of descriptors
+     * @param {number} gapPeriod Adjacent datapoints of a series that exceed this difference will have null values
+     * inserted so that flot will render a gap in the series.
+     * @return {Array} data in the format suitable for <code>flot.setData(data)</code>
+     */
+    factory.toFlotData = function (seriesDescriptors, cloudWatchMetrics, gapPeriod) {
 
       var data = [];
       for (var i = 0; i < cloudWatchMetrics.length; i++) {
@@ -15,7 +23,8 @@
         var seriesName = seriesDescriptor.customName || seriesDescriptor.name;
         data.push({
           label: seriesDescriptor.aggregation + ' ' + seriesName,
-          data: series
+          data: series,
+          xGapThresh: gapPeriod
         });
       }
       return data;

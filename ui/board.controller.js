@@ -134,6 +134,7 @@
               show: true
             },
             xaxis: {
+              insertGaps: true,
               tickFormatter: function (val) {
                 return moment(val).format('HH:mm<br/>ddd M/D');
               }
@@ -166,7 +167,12 @@
           }))
           .then(function (metricsData) {
             if (refresh.counter == requestId) {
-              var flotData = Charting.toFlotData(board.metrics, metricsData);
+              var flotData = Charting.toFlotData(
+                  board.metrics,
+                  metricsData,
+                  // This is a moment.js duration, but they easily coerce to numbers. It works (I think)!
+                  vm.selectedPeriod()
+              );
 
               vm.flot.setData(flotData);
               vm.flot.setupGrid();
