@@ -131,7 +131,8 @@
               hoverable: true
             },
             legend: {
-              show: true
+              show: true,
+              hideable: true
             },
             xaxis: {
               insertGaps: true,
