@@ -140,6 +140,11 @@
                 return moment(val).format('HH:mm<br/>ddd M/D');
               }
             },
+            yaxis: {
+              tickFormatter: function (val) {
+                return Number(val).toLocaleString();
+              }
+            },
             tooltip: true,
             tooltipOpts: {
 
