@@ -2,6 +2,10 @@
     /* keep it sharp */
     border-radius : 0 !important;
 }
+.anvil a {
+    /* all <a> elements should have a pointer */
+    cursor : pointer;
+}
 .anvil code {
     /* don't chop <code> sequences into pieces */
     white-space : nowrap;
@@ -80,4 +84,11 @@
 .anvil .extra-space {
     /* Extra space so user does not have to work at the bottom of the screen. */
     height: 60vh;
+}
+/* ui-sortable */
+.anvil ol.sortable {
+
+}
+.anvil ol.sortable li {
+    /*cursor : pointer;*/
 }

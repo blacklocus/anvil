@@ -62,6 +62,10 @@
       });
     };
 
+    vm.showLayoutModal = function () {
+      $('#layoutModal').modal('show');
+    };
+
 
     // Initialize tooltips
     $('body').tooltip({

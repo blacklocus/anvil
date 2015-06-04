@@ -1,4 +1,4 @@
-AnvilApp = angular.module('AnvilApp', ['ui.router', 'LocalStorageModule']);
+AnvilApp = angular.module('AnvilApp', ['ui.router', 'ui.sortable', 'LocalStorageModule']);
 
 AnvilApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 

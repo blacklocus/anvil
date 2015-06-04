@@ -9,6 +9,10 @@
     <div class="panel panel-primary" style="margin-bottom: 0;">
       <div class="panel-heading">
         <div class="panel-title">
+
+          <button class="pull-right btn btn-info"
+                  ng-click="wallCtrl.showLayoutModal()">Change Layout</button>
+
           <h2 ng-hide="wallCtrl.editingName">
             <span data-toggle="tooltip" data-placement="right" title="Click to edit the Wall's name"
                   ng-click="wallCtrl.startRenameWall()">
@@ -41,4 +45,5 @@
     </div>
   </div>
 
+  <ng-include src="'layout.html'"></ng-include>
 </div>
