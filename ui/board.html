@@ -1,6 +1,10 @@
 <div ng-controller="BoardCtrl as boardCtrl">
   <div>
       <span class="pull-right">
+        <button type="button" class="btn btn-default"
+            ng-click="boardCtrl.requestRefresh()">
+          <i class="fa fa-refresh"></i>
+        </button>
         <button type="button" class="btn btn-primary"
                 ng-hide="boardCtrl.editedBoard"
                 ng-click="boardCtrl.startEditSeries()">Edit Board
