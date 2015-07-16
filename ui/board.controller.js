@@ -132,6 +132,7 @@
             },
             legend: {
               show: true,
+              position: 'nw',
               hideable: true
             },
             xaxis: {
