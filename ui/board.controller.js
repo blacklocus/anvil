@@ -181,6 +181,12 @@
                   vm.selectedPeriod()
               );
 
+              // Apply this min X axis to all X axes (usually there is only 1).
+              var xMin = moment().subtract(vm.selectedWindow()).toDate().getTime();
+              _.forEach(vm.flot.getXAxes(), function(xAxis) {
+                  xAxis.options.min = xMin;
+              });
+
               vm.flot.setData(flotData);
               vm.flot.setupGrid();
               vm.flot.draw();
