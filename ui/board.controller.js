@@ -182,8 +182,8 @@
               );
 
               // Apply this min/max X axis to all X axes (usually there is only 1).
-              var xMax = new Date().getTime(); // now
               var xMin = moment().subtract(vm.selectedWindow()).toDate().getTime();
+              var xMax = new Date().getTime(); // now
               _.forEach(vm.flot.getXAxes(), function(xAxis) {
                   xAxis.options.min = xMin;
                   xAxis.options.max = xMax;
