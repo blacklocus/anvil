@@ -3,11 +3,12 @@
   <table class="table table-bordered">
     <thead>
     <tr>
+      <th>view</th>
       <th>name</th>
       <th>boards</th>
       <th>created</th>
       <th>modified</th>
-      <th>action</th>
+      <th>demolish</th>
     </tr>
     </thead>
     <tbody>
@@ -37,12 +38,12 @@
       </td>
     </tr>
     <tr ng-repeat="wall in wallsCtrl.list">
+      <td><a type="button" class="btn btn-info" ui-sref="wall({name: wall.name})">View</a></td>
       <td>{{ wall.name }}</td>
       <td>{{ wall.boards.length }}</td>
       <td>{{ wall.created }}</td>
       <td>{{ wall.modified }}</td>
       <td>
-        <a type="button" class="btn btn-info" ui-sref="wall({name: wall.name})">View</a>
         <button type="button" class="btn btn-danger btn-sm pull-right"
                 ng-click="wallsCtrl.destroyWall(wall)">Demolish
         </button>
