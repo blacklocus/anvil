@@ -65,7 +65,7 @@
       </div>
       <div class="row">
           <span class="col-sm-4 text-right">
-            = up to <strong>{{ boardCtrl.selectedWindow() / boardCtrl.selectedPeriod() }}</strong> data points
+            = up to <strong>{{ boardCtrl.selectedWindow() / boardCtrl.selectedPeriod() | number:0 }}</strong> data points
           </span>
         <aside class="col-sm-8">
           ⇐ The sliders automatically adjust to maintain a reasonable number of data points
