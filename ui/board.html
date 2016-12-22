@@ -46,7 +46,7 @@
     <div class="col-sm-9">
       <div class="row">
           <span class="col-sm-4 text-right">
-            window of <strong>{{ boardCtrl.windowOpts[boardCtrl.selectedWindowIdx].humanize() }}</strong>
+            window of <strong>{{ boardCtrl.humanizeDuration() }}</strong>
           </span>
           <span class="col-sm-8">
             <input type="range" min="0" max="{{ boardCtrl.windowOpts.length - 1 }}"

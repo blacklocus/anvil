@@ -11,14 +11,21 @@
     vm.minDataPoints = 10;
     vm.maxDataPoints = 1000;
 
-    vm.windowOpts = Util.toDurations(['1.4 years', '12 months', '8 months', '6 months', '4 months', '2 months', '1 month', '2 weeks', '10 days', '1 week', '6 days', '5 days', '4 days', '3 days',
+    vm.windowOpts = Util.toDurations(['15 months', '12 months', '8 months', '6 months', '4 months', '2 months', '1 month', '2 weeks', '10 days', '1 week', '6 days', '5 days', '4 days', '3 days',
       '2 days', '1 day', '18 hours', '12 hours', '6 hours', '3 hours', '2 hours', '1 hour']);
-    vm.periodOpts = Util.toDurations(['1 month', '5 days', '10 days', '5 days', '2 days', '1 day', '6 hours', '1 hour', '15 minutes', '5 minutes', '1 minute']);
+    vm.periodOpts = Util.toDurations(['1 month', '15 days', '10 days', '5 days', '2 days', '1 day', '12 hours', '6 hours', '1 hour', '15 minutes', '5 minutes', '1 minute']);
 
     vm.editingName = false;
 
     vm.busy = false;
 
+    vm.humanizeDuration = function () {
+      var duration = vm.windowOpts[vm.selectedWindowIdx];
+      if (/P[0-9]+Y[0-9A-Z]*/.test(JSON.stringify(duration))) {
+        return duration.format("M [months]");
+      }
+      return duration.humanize();
+    };
 
     vm.selectedWindow = function () {
       return vm.windowOpts[vm.selectedWindowIdx];
