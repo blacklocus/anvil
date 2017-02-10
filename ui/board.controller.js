@@ -171,7 +171,7 @@
             xaxis: {
               insertGaps: true,
               tickFormatter: function (val) {
-                return moment(val).format('HH:mm<br/>ddd M/D');
+                return moment(val).format('HH:mm<br/>ddd M/D/YY');
               }
             },
             yaxis: {
