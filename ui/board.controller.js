@@ -11,9 +11,35 @@
     vm.minDataPoints = 10;
     vm.maxDataPoints = 1000;
 
-    vm.windowOpts = Util.toDurations(['15 months', '12 months', '9 months', '6 months', '3 months', '2 months', '1 month', '15 days', '8 days', '5 days', '3 days',
-      '2 days', '1 day', '18 hours', '12 hours', '6 hours', '3 hours', '2 hours', '1 hour']);
-    vm.periodOpts = Util.toDurations(['1 day', '12 hours', '6 hours', '1 hour', '15 minutes', '5 minutes', '1 minute']);
+    vm.windowOpts = Util.toDurations([
+      '15 months',
+      '12 months',
+      '9 months',
+      '6 months',
+      '3 months',
+      '2 months',
+      '1 month',
+      '15 days',
+      '8 days',
+      '5 days',
+      '3 days',
+      '2 days',
+      '1 day',
+      '18 hours',
+      '12 hours',
+      '6 hours',
+      '3 hours',
+      '2 hours',
+      '1 hour']);
+
+    vm.periodOpts = Util.toDurations([
+      '1 day',
+      '12 hours',
+      '6 hours',
+      '1 hour',
+      '15 minutes',
+      '5 minutes',
+      '1 minute']);
 
     vm.editingName = false;
 
